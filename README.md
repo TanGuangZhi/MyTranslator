@@ -8,7 +8,9 @@
  * 参考：[Zotero（1）：文献管理软件Zotero基础及进阶示范 - 阳志平的网志](https://www.yangzhiping.com/tech/zotero1.html)
 
 ## 2.2. translator更新流程图
-![](http://picbed.tgz666.top/20210412114716.png)
+![image](https://user-images.githubusercontent.com/53848822/114983656-77c2d280-9ec3-11eb-95a7-b1d67bb6ced3.png)
+
+
 
  * 更详细的教程可参考隔壁zotero中文小组详细文档或视频教学 ：[l0o0/translators_CN: Zotero translator中文网页抓取插件](https://github.com/l0o0/translators_CN)
 
@@ -42,15 +44,15 @@
 
 * 此外提供极简版[DouBanSimple.js](https://github.com/Captain2021/myTranslator/blob/master/DoubanSimple.js) ，有觉得以上内容冗余可以使用极简版，主要是对标题的简化
 
-**8. 截图展示**  
-
+**8. [截图展示](https://github.com/Captain2021/MyTranslator/blob/main/ShowDetail.md#DouBan)**  
 
 
 # 4. 想获取更多translator？
-* 查看是否已在[目标看板](https://trello.com/b/xYoOwhiP/translator)等待开发
-* 联系我或者其他维护者
+* 查看是否已在[目标看板](https://trello.com/b/xYoOwhiP/translator)等待开发，目前不断新增中
 * 去隔壁zotero中文小组看看 ：[l0o0/translators_CN: Zotero translator中文网页抓取插件](https://github.com/l0o0/translators_CN)
+* 点击链接前往个人公众号[【啊哈原来是船长】](https://mp.weixin.qq.com/s/PgaQ4d-s26lDKxauYF1osw)后台私信
 * 加入zotero翻译组qq群：913637964
+
 
 
 # 5. 主要贡献者
