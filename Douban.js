@@ -178,7 +178,7 @@ function scrapeAndParse(doc, url) {
 		page = page.replace(/&nbsp;/g,"")
 		// Z.debug(page)
 		// 豆瓣里作者一栏及其不规范,这里使用多正则匹配更多情况,提高兼容性
-		let regexp = new RegExp() // 这里要把类型定义为RegExp,否则下面赋值后test(page)会失败
+		let regexp = new RegExp() // 这里要把类型定义为RegExp,否则下面赋值后test(page)会失败 
 		let regexp2 = new RegExp()
 		let regexp3 = new RegExp()
 		regexp = /<span>\s*<span[^>]*?>\s*作者<\/span>:(.*?)<\/span>/;

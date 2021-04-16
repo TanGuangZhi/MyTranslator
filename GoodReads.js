@@ -121,7 +121,7 @@ function scrape(doc, url){
 	let GrRatingsList = ZU.xpath(doc, '//meta[@itemprop="ratingCount"]')
 	let GrRatings = GrRatingsList[0].content
 	GrRatings= GrRatings.trim()+" ratings"
-	if(GrRatings==="  "||GrRatings===""){
+	if(GrRatings==="  "||GrRatings===""){ 
 		GrRatings = "?"
 	}
 	newItem.place = GrRatings
