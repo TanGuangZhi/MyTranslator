@@ -46,8 +46,13 @@
 
 **8. [截图展示](https://github.com/Captain2021/MyTranslator/blob/main/ShowDetail.md#DouBan)**  
 
+# 4. 想进一步了解zotero？
+* 推荐——[阳老师的知识星球🌏 ](https://t.zsxq.com/qJuFqN3)
+* [开智学堂的公众号](https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzA4ODM4ODQ3MQ==#wechat_redirect)
+* [开智学堂官网](https://m.openmindclub.com/mkt/course/IA009)
+* [开智招牌课程——信息分析](https://m.openmindclub.com/mkt/course/IA009)
 
-# 4. [想获取更多translator？](https://github.com/Captain2021/MyTranslator/blob/main/ShowDetail.md#wantMore)
+# 5. [想获取更多translator？](https://github.com/Captain2021/MyTranslator/blob/main/ShowDetail.md#wantMore)
 * 查看是否已在[目标看板](https://trello.com/b/xYoOwhiP/translator)等待开发，目前不断新增中
 * 去隔壁zotero中文小组看看 ：[l0o0/translators_CN: Zotero translator中文网页抓取插件](https://github.com/l0o0/translators_CN)
 * 点击链接前往个人公众号[【啊哈原来是船长】](https://mp.weixin.qq.com/s/PgaQ4d-s26lDKxauYF1osw)后台私信
@@ -55,15 +60,11 @@
 
 
 
-# 5. 主要贡献者
-## 5.1. 优质源提供者
+# 6. 主要贡献者
+## 6.1. 优质源提供者
 * [@李仁冲](https://github.com/lirenchong)
 * [@啊哈船长](https://github.com/Captain2021)
-## 5.2. translator开发者
+## 6.2. translator开发者
 * [@啊哈船长](https://github.com/Captain2021)
 
-# 6. 想进一步了解zotero？
-* 推荐——[阳老师的知识星球🌏 ](https://t.zsxq.com/qJuFqN3)
-* [开智学堂的公众号](https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzA4ODM4ODQ3MQ==#wechat_redirect)
-* [开智学堂官网](https://m.openmindclub.com/mkt/course/IA009)
-* [开智招牌课程——信息分析](https://m.openmindclub.com/mkt/course/IA009)
+
