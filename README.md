@@ -47,7 +47,7 @@
 **8. [截图展示](https://github.com/Captain2021/MyTranslator/blob/main/ShowDetail.md#DouBan)**  
 
 
-# 4. 想获取更多translator？
+# 4. [想获取更多translator？](https://github.com/Captain2021/MyTranslator/blob/main/ShowDetail.md#wantMore)
 * 查看是否已在[目标看板](https://trello.com/b/xYoOwhiP/translator)等待开发，目前不断新增中
 * 去隔壁zotero中文小组看看 ：[l0o0/translators_CN: Zotero translator中文网页抓取插件](https://github.com/l0o0/translators_CN)
 * 点击链接前往个人公众号[【啊哈原来是船长】](https://mp.weixin.qq.com/s/PgaQ4d-s26lDKxauYF1osw)后台私信
