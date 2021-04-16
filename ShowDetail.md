@@ -1,4 +1,4 @@
-# 0. 想获取更多translator？
+# <span id = "wantMore">0. 想获取更多translator？</span> 
 * 查看是否已在[目标看板](https://trello.com/b/xYoOwhiP/translator)等待开发，目前不断新增中
   *  ![image](https://user-images.githubusercontent.com/53848822/115009267-b44ff780-9ede-11eb-874d-6a31449c890f.png)
   
