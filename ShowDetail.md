@@ -1,3 +1,14 @@
+# 0. 想获取更多translator？
+* 查看是否已在[目标看板](https://trello.com/b/xYoOwhiP/translator)等待开发，目前不断新增中
+  *  ![image](https://user-images.githubusercontent.com/53848822/115009267-b44ff780-9ede-11eb-874d-6a31449c890f.png)
+  
+* 去隔壁zotero中文小组看看 ：[l0o0/translators_CN: Zotero translator中文网页抓取插件](https://github.com/l0o0/translators_CN)
+* 点击链接前往个人公众号[【啊哈原来是船长】](https://mp.weixin.qq.com/s/PgaQ4d-s26lDKxauYF1osw)后台私信
+  * ![image](https://user-images.githubusercontent.com/53848822/115009382-d3e72000-9ede-11eb-9fed-1334083a71cd.png)
+
+* 加入zotero翻译组qq群：913637964
+
+
 # <span id = "DouBan">1. 豆瓣-->DouBan.js</span> 
 
 ## 1.1. 单篇抓取效果
