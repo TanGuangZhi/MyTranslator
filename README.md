@@ -63,7 +63,7 @@
 * [@啊哈船长](https://github.com/Captain2021)
 
 # 6. 想进一步了解zotero？
-* 推荐[阳老师的知识星球🌏 ](https://t.zsxq.com/qJuFqN3)
+* 推荐——[阳老师的知识星球🌏 ](https://t.zsxq.com/qJuFqN3)
 * [开智学堂的公众号](https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzA4ODM4ODQ3MQ==#wechat_redirect)
 * [开智学堂官网](https://m.openmindclub.com/mkt/course/IA009)
 * [开智招牌课程——信息分析](https://m.openmindclub.com/mkt/course/IA009)
