@@ -44,8 +44,7 @@
 
 * 此外提供极简版[DouBanSimple.js](https://github.com/Captain2021/myTranslator/blob/master/DoubanSimple.js) ，有觉得以上内容冗余可以使用极简版，主要是对标题的简化
 
-**8. 截图展示**  
-* [点击查看DouBan.js详细图片展示](https://github.com/Captain2021/MyTranslator/edit/main/ShowDetail.md#DouBan)
+**8. [截图展示](https://github.com/Captain2021/MyTranslator/blob/main/ShowDetail.md#DouBan)**  
 
 
 # 4. 想获取更多translator？
