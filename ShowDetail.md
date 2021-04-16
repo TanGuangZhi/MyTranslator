@@ -1,9 +1,11 @@
 # 1. 豆瓣-->DouBan.js
 
 ## 1.1. 单篇抓取效果
+| 元数据信息                                                   | 目录信息                                                     |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+|![image](https://user-images.githubusercontent.com/53848822/114980197-b1dda580-9ebe-11eb-90f4-9841b6924aa3.png) | ![image](https://user-images.githubusercontent.com/53848822/114980210-b4d89600-9ebe-11eb-9acb-8d095e49a5fd.png) |
 
-![image](https://user-images.githubusercontent.com/53848822/114980197-b1dda580-9ebe-11eb-90f4-9841b6924aa3.png)
-![image](https://user-images.githubusercontent.com/53848822/114980210-b4d89600-9ebe-11eb-9acb-8d095e49a5fd.png)
+
 
 ## 1.2. 批量抓取效果
 
