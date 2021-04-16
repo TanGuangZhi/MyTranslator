@@ -1,6 +1,6 @@
 {
 	"translatorID": "4355f8a9-3d1a-4cd6-ba02-1a458c3d81e1",
-	"label": "GoodReads",
+	"label": "Goodreads",
 	"creator": "啊哈船长<TanGuangZhi@foxmail.com>",
 	"target": "https://www.goodreads.com/book/.+",
 	"minVersion": "3.0",
@@ -9,7 +9,7 @@
 	"inRepository": true,
 	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2021-04-16 05:15:41"
+	"lastUpdated": "2021-04-16 10:00:31"
 }
 
 /*
@@ -84,13 +84,18 @@ function scrape(doc, url){
 	newItem.title = GrTitle
 	
 	// author
-	let author = ZU.xpathText(doc, '//span[@itemprop="name"]')
-	// 拆分lastname与firstname
-	author = ZU.cleanAuthor(author, 'author') 
-	newItem.creators.push({firstName:author.firstName,
+	let authorList = ZU.xpathText(doc, '//span[@itemprop="name"]')
+	authorList = authorList.split(",")
+	let author = ""
+	for(i=0;i<authorList.length;i++){
+		author = authorList[i]
+		// 拆分lastname与firstname
+		author = ZU.cleanAuthor(author, 'author') 
+		newItem.creators.push({firstName:author.firstName,
 							lastName:author.lastName, 
 							creatorType:"author",
 							fieldMode:true});
+	}
 	
 	// 摘要
 	let GrAbstractList = ZU.xpath(doc, '//div[@id="description"]/span')
@@ -135,7 +140,10 @@ function scrape(doc, url){
 		publishedTime = RegExp.$1
 		publisher = RegExp.$2
 		// 英文格式的日期转yyyy-MM-dd
-		publishedTime = stringDateToNum(publishedTime)
+		
+		if(!publishedTime===" "){
+			publishedTime = stringDateToNum(publishedTime)
+		}
 		newItem.date = publishedTime
 		newItem.publisher = publisher
 	}
@@ -145,9 +153,9 @@ function scrape(doc, url){
 	newItem.ISBN = GrISBN
 	
 	// Kindle价格 → rights字段 这里需要是美区IP才能显示Kindle价格
-	let price = ZU.xpathText(doc, '//a[@data-asin="B073YTX8TM"]')
+	let price = ZU.xpathText(doc, '//ul[@class="buyButtonBar left"]/li/a[contains(text(),"Kindle Store")]')
 	if(price){
-		price = "$"+price.match(/\d\.?\d+/g)[0]
+		price = "$"+price.match(/\d+\.?\d+/g)[0]
 		newItem.rights = price
 	}
 	// URL
@@ -173,16 +181,30 @@ function stringDateToNum(stringDate){
 			December:"12"
 	}	
 	let stringDateList = stringDate.match(/\w+/g)
-	let year = stringDateList[2]
-	let month = stringDateList[0]
-	let day = stringDateList[1]
-	month = string2Month[month]
-	day = day.match(/\d+/g)[0]
-	if(day.length<2){ // day不足2位补零
-		day = "0"+day
+	let year = ""
+	let month = ""
+	let day = ""
+	let temp = ""
+	// 应对某些书籍没有月日的情况
+	if(stringDateList.length>2){
+		year = stringDateList[2]
+		month = stringDateList[0]
+		day = stringDateList[1]
+		month = string2Month[month]
+		day = day.match(/\d+/g)[0]
+		if(day.length<2){ // day不足2位补零
+			day = "0"+day
+		}
+		temp = year+"-"+month+"-"+day
+	} else if (stringDateList.length>1){
+		year = stringDateList[1]
+		month = stringDateList[0]
+		month = string2Month[month]
+		temp = year+"-"+month
+	} else {
+		year = stringDateList[0]
+		temp = year
 	}
-	
-	let temp = year+"-"+month+"-"+day
 	return temp
 }
 

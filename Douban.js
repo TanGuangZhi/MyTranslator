@@ -9,7 +9,7 @@
 	"inRepository": true,
 	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2021-04-01 03:23:39"
+	"lastUpdated": "2021-04-16 10:01:36"
 }
 
 /*
@@ -109,20 +109,12 @@ function trimTags(text) {
 	return text.replace(/(<.*?>)/g, "");
 }
 
-// #############################
-// ##### Scraper functions #####
-// #############################
-
 function scrapeAndParse(doc, url) {
-	// Z.debug({ url })
 	Zotero.Utilities.HTTP.doGet(url, function (page) {
-		// Z.debug(page)
 		var pattern;
-
 		// 类型 & URL
 		var itemType = "book";
 		var newItem = new Zotero.Item(itemType);
-		// Zotero.debug(itemType);
 		newItem.url = url;
 
 		// 评分
@@ -131,7 +123,6 @@ function scrapeAndParse(doc, url) {
 		if(dbScore==="  "||dbScore===""){
 			dbScore = "?"
 		}
-		
 		
 		// 评价人数
 		let commentNum = ZU.xpathText(doc, '//*[@id="interest_sectl"]/div[1]/div[2]/div/div[2]/span/a/span')
@@ -147,6 +138,7 @@ function scrapeAndParse(doc, url) {
 		pattern = /<span [^>]*?>原作名:<\/span>(.*?)<br\/>/;
 		if (pattern.test(page)) {
 			var originalTitle = pattern.exec(page)[1].trim()
+			originalTitle = originalTitle.replace(/：/g,": ")
 		}
 		
 		// 标题
@@ -165,13 +157,12 @@ function scrapeAndParse(doc, url) {
 				titleTemp = "《"+title+" - "+subTitle+"》"+commentNum+" "+"评"+" "+dbScore+originalTitlePre+originalTitle			
 			}
 			titleTemp = titleTemp.replace(/( - )?undefined/g,"").replace("null","0")
+			titleTemp = titleTemp.replace(/&#39;/g,"'") // 替换部分ASCLL码
 			newItem.title = titleTemp
 		}
 		
-		
 		// 短标题
 			newItem.shortTitle = "《"+title+"》"
-
 
 		// 目录
 		let catalogueList = ZU.xpath(doc, "//div[@class='indent' and contains(@id, 'dir_') and contains(@id, 'full')]")
@@ -252,10 +243,13 @@ function scrapeAndParse(doc, url) {
 				firstNameList.push(country+ming)
 				lastNameList.push(xing)
 				
-				newItem.creators.push({firstName:firstNameList[i],lastName:lastNameList[i], creatorType:"author", fieldMode:true});
-				// newItem.creators.push(Zotero.Utilities.cleanAuthor(
-				// 	Zotero.Utilities.trim(authorNames[i]),
-				// 	"author", useComma));
+				newItem.creators.push(
+					{firstName:firstNameList[i],
+					lastName:lastNameList[i],
+					creatorType:"author",
+					fieldMode:true
+					}
+				);
 			}
 		}
 		
@@ -330,8 +324,9 @@ function scrapeAndParse(doc, url) {
 		pattern = /<span [^>]*?>丛书:<\/span>(.*?)<br\/>/;
 		if (pattern.test(page)) {
 			var series = trimTags(pattern.exec(page)[1]);
+			series = series.replace(/ISBN: ?\d+/g,"")
+			series = series.replace(/&nbsp;/g,"")
 			newItem.series = Zotero.Utilities.trim(series);
-			// Zotero.debug("series: "+series);
 		}
 
 		// 出版年
@@ -367,7 +362,6 @@ function scrapeAndParse(doc, url) {
 			authorInfotwo = authorInfotwo+RegExp.$1+"\n"
 			}
 		}
-	
 		
 		// 内容简介
 		// 获取展开全部按钮里面的内容
@@ -389,18 +383,16 @@ function scrapeAndParse(doc, url) {
 		newItem.abstractNote = abstractNoteTemp
 		
 	
-		// 调用qk api,实现html转md
-		var postUrl = "https://tools.getquicker.cn/api/MarkDown/Html2Markdown"
-		let postData = "{\"source\":\"<h1>string</h1>\"}"
-		let headers  = {
-		 	Accept: "text/plain",
-		 	"Content-Type": "application/json",
-		}
-	
-	  
-		ZU.doPost(postUrl, postData, function(text){
+		// // 调用qk api,实现html转md
+		// var postUrl = "https://tools.getquicker.cn/api/MarkDown/Html2Markdown"
+		// let postData = "{\"source\":\"<h1>string</h1>\"}"
+		// let headers  = {
+		//  	Accept: "text/plain",
+		//  	"Content-Type": "application/json",
+		// }
+		// ZU.doPost(postUrl, postData, function(text){
 			
-		}, headers)
+		// }, headers)
 		
 		newItem.complete();
 	});
@@ -434,6 +426,7 @@ function getNowFormatTime() {
 function completeDate(value) {
 	return value < 10 ? "0"+value:value;
 }
+
 /** BEGIN TEST CASES **/
 var testCases = [
 	{
