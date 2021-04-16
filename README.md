@@ -8,7 +8,9 @@
  * 参考：[Zotero（1）：文献管理软件Zotero基础及进阶示范 - 阳志平的网志](https://www.yangzhiping.com/tech/zotero1.html)
 
 ## 2.2. translator更新流程图
-![](http://picbed.tgz666.top/20210412114716.png)
+![image](https://user-images.githubusercontent.com/53848822/114983656-77c2d280-9ec3-11eb-95a7-b1d67bb6ced3.png)
+
+
 
  * 更详细的教程可参考隔壁zotero中文小组详细文档或视频教学 ：[l0o0/translators_CN: Zotero translator中文网页抓取插件](https://github.com/l0o0/translators_CN)
 
