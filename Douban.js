@@ -1,7 +1,7 @@
 {
 	"translatorID": "fc353b26-8911-4c34-9196-f6f567c93901",
 	"label": "Douban",
-	"creator": "不是船长<tanguangzhi@foxmail.com>,Ace Strong<acestrong@gmail.com>",
+	"creator": "啊哈船长<TanGuangZhi@foxmail.com>,Ace Strong<acestrong@gmail.com>",
 	"target": "^https?://(www|book)\\.douban\\.com/(subject|doulist|people/[a-zA-Z._]*/(do|wish|collect)|.*?status=(do|wish|collect)|group/[0-9]*?/collection|tag)",
 	"minVersion": "2.0rc1",
 	"maxVersion": "",
@@ -342,34 +342,6 @@ function scrapeAndParse(doc, url) {
 			// Zotero.debug("date: "+date);
 		}
 		
-		//获取当前日期，格式YYYY-MM-DD
-		function getNowFormatDay(nowDate) {
-			var char = "-";
-			if(nowDate == null){
-				nowDate = new Date();
-			}
-			var day = nowDate.getDate();
-			var month = nowDate.getMonth() + 1;//注意月份需要+1
-			var year = nowDate.getFullYear();
-			//补全0，并拼接
-			return year + char + completeDate(month) + char +completeDate(day);
-		}
-	 
-		//获取当前时间，格式YYYY-MM-DD HH:mm:ss
-		function getNowFormatTime() {
-			var nowDate = new Date();
-			var colon = ":";
-			var h = nowDate.getHours();
-			var m = nowDate.getMinutes();
-			var s = nowDate.getSeconds();
-			//补全0，并拼接
-			return getNowFormatDay(nowDate) + " " + completeDate(h) + colon + completeDate(m) + colon + completeDate(s);
-		}
-	 
-		//补全0
-		function completeDate(value) {
-			return value < 10 ? "0"+value:value;
-		}
 		// 其他
 		let nowTime = getNowFormatTime() // 在评分后面新增时间,保持时效性
 		newItem.extra = "D"+dbScore.trim()+" 📅"+nowTime
@@ -434,6 +406,34 @@ function scrapeAndParse(doc, url) {
 	});
 }
 
+//获取当前日期，格式YYYY-MM-DD
+function getNowFormatDay(nowDate) {
+	var char = "-";
+	if(nowDate == null){
+		nowDate = new Date();
+	}
+	var day = nowDate.getDate();
+	var month = nowDate.getMonth() + 1;//注意月份需要+1
+	var year = nowDate.getFullYear();
+	//补全0，并拼接
+	return year + char + completeDate(month) + char +completeDate(day);
+}
+
+//获取当前时间，格式YYYY-MM-DD HH:mm:ss
+function getNowFormatTime() {
+	var nowDate = new Date();
+	var colon = ":";
+	var h = nowDate.getHours();
+	var m = nowDate.getMinutes();
+	var s = nowDate.getSeconds();
+	//补全0，并拼接
+	return getNowFormatDay(nowDate) + " " + completeDate(h) + colon + completeDate(m) + colon + completeDate(s);
+}
+
+//补全0
+function completeDate(value) {
+	return value < 10 ? "0"+value:value;
+}
 /** BEGIN TEST CASES **/
 var testCases = [
 	{

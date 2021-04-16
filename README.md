@@ -38,11 +38,13 @@
 
 * 目录存放至note附件里
 
-**7. 详细展示**  
+**7. 其他**
 
-此外提供极简版[DouBanSimple.js](https://github.com/Captain2021/myTranslator/blob/master/DoubanSimple.js) ，有觉得以下内容冗余可以使用极简版，主要是对标题的简化![Pasted image 20210408114137.png](http://picbed.tgz666.top/20210408115923.png)
+* 此外提供极简版[DouBanSimple.js](https://github.com/Captain2021/myTranslator/blob/master/DoubanSimple.js) ，有觉得以上内容冗余可以使用极简版，主要是对标题的简化
 
- ![Pasted image 20210408114200.png](http://picbed.tgz666.top/20210408115924.png)
+**8. 截图展示**  
+
+
 
 # 4. 想获取更多translator？
 * 查看是否已在[目标看板](https://trello.com/b/xYoOwhiP/translator)等待开发
