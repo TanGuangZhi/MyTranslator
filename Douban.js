@@ -162,13 +162,14 @@ function scrapeAndParse(doc, url) {
 		}
 		
 		// 短标题
-			newItem.shortTitle = "《"+title+"》"
+			newItem.shortTitle = title
 
 		// 目录
 		let catalogueList = ZU.xpath(doc, "//div[@class='indent' and contains(@id, 'dir_') and contains(@id, 'full')]")
 		let catalogue = ""
 		if(catalogueList.length>0){
 			catalogue = "<h1>#摘录-《"+title+"》目录</h1>\n"+catalogueList[0].innerHTML
+			
 			newItem.notes.push({note:catalogue})
 		}
 		
