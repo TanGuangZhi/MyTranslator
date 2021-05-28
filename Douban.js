@@ -1,7 +1,7 @@
 {
 	"translatorID": "fc353b26-8911-4c34-9196-f6f567c93901",
 	"label": "Douban",
-	"creator": "啊哈船长<TanGuangZhi@foxmail.com>,Ace Strong<acestrong@gmail.com>",
+	"creator": "氦客船长<TanGuangZhi@foxmail.com>,Ace Strong<acestrong@gmail.com>",
 	"target": "^https?://(www|book)\\.douban\\.com/(subject|doulist|people/[a-zA-Z._]*/(do|wish|collect)|.*?status=(do|wish|collect)|group/[0-9]*?/collection|tag)",
 	"minVersion": "2.0rc1",
 	"maxVersion": "",
@@ -9,7 +9,7 @@
 	"inRepository": true,
 	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2021-04-16 10:01:36"
+	"lastUpdated": "2021-04-23 15:46:29"
 }
 
 /*
@@ -60,7 +60,6 @@ function detectWeb(doc, url) {
 }
 
 function detectTitles(doc, url) {
-	
 	var pattern = /\.douban\.com\/tag\//;
 	if (pattern.test(url)) {
 		return ZU.xpath(doc, '//div[@class="info"]/h2/a');
@@ -94,7 +93,7 @@ function doWeb(doc, url) {
 			for (var i in items) {
 				articles.push(i);
 			}
-			Zotero.Utilities.processDocuments(articles, scrapeAndParse);
+			Zotero.Utilities.processDocuments(articles, scrapeAndParse(doc, url));
 		});
 	}
 	else {
@@ -142,24 +141,32 @@ function scrapeAndParse(doc, url) {
 		}
 		
 		// 标题
-		let titleTemp = ""
+		// let titleTemp = ""
+		// pattern = /<h1>([\s\S]*?)<\/h1>/;
+		// if (pattern.test(page)) {
+		// 	var title = pattern.exec(page)[1];
+		// 	title = Zotero.Utilities.trim(trimTags(title))
+		// 	let originalTitlePre = " #"
+		// 	if(!originalTitle){ // 当没有原名时,使用空字符
+		// 		originalTitlePre = ""
+		// 	}
+		// 	if(title === subTitle){ // 判断下副标题与标题一样否,避免重复
+		// 		titleTemp = "《"+title+"》"+commentNum+" "+"评"+" "+dbScore+originalTitlePre+originalTitle
+		// 	} else {
+		// 		titleTemp = "《"+title+" - "+subTitle+"》"+commentNum+" "+"评"+" "+dbScore+originalTitlePre+originalTitle			
+		// 	}
+		// 	titleTemp = titleTemp.replace(/( - )?undefined/g,"").replace("null","0")
+		// 	titleTemp = titleTemp.replace(/&#39;/g,"'") // 替换部分ASCLL码
+		// 	newItem.title = titleTemp
+		// }
+
+		// 极简版标题
 		pattern = /<h1>([\s\S]*?)<\/h1>/;
 		if (pattern.test(page)) {
 			var title = pattern.exec(page)[1];
 			title = Zotero.Utilities.trim(trimTags(title))
-			let originalTitlePre = " #"
-			if(!originalTitle){ // 当没有原名时,使用空字符
-				originalTitlePre = ""
-			}
-			if(title === subTitle){ // 判断下副标题与标题一样否,避免重复
-				titleTemp = "《"+title+"》"+commentNum+" "+"评"+" "+dbScore+originalTitlePre+originalTitle
-			} else {
-				titleTemp = "《"+title+" - "+subTitle+"》"+commentNum+" "+"评"+" "+dbScore+originalTitlePre+originalTitle			
-			}
-			titleTemp = titleTemp.replace(/( - )?undefined/g,"").replace("null","0")
-			titleTemp = titleTemp.replace(/&#39;/g,"'") // 替换部分ASCLL码
-			newItem.title = titleTemp
 		}
+		newItem.title = title
 		
 		// 短标题
 			newItem.shortTitle = title
@@ -169,7 +176,6 @@ function scrapeAndParse(doc, url) {
 		let catalogue = ""
 		if(catalogueList.length>0){
 			catalogue = "<h1>#摘录-《"+title+"》目录</h1>\n"+catalogueList[0].innerHTML
-			
 			newItem.notes.push({note:catalogue})
 		}
 		
@@ -195,13 +201,13 @@ function scrapeAndParse(doc, url) {
 			var authorNames = trimTags(regexp.exec(page)[0]);
 			pattern = /(\[.*?\]|\(.*?\)|（.*?）)/g;
 			authorNames = authorNames.replace(pattern, "").split("/");
-			// 国家
-			let country = RegExp.$1
-			country = country.replace("美国","美")
-			country = country.match(/[一-龥]+/g)
-			if(country===null){
-				country = [" "]
-			}
+			// // 国家
+			// let country = RegExp.$1
+			// country = country.replace("美国","美")
+			// country = country.match(/[一-龥]+/g)
+			// if(country===null){
+			// 	country = [" "]
+			// }
 
 			// Zotero.debug(authorNames);
 			let firstNameList = [] // 作者名列表
@@ -233,15 +239,15 @@ function scrapeAndParse(doc, url) {
 					xing = authorNameTemp.pop()
 					ming = authorNameTemp.join("·")
 				}
-				if(country[i]){
-					country = country[i].replace(/<\/a>/g,"")
-				}
+				// if(country[i]){
+				// 	country = country[i].replace(/<\/a>/g,"")
+				// }
 			
-				if(country!=" "){
-					country = "["+country+"]"
-				}
+				// if(country!=" "){
+				// 	country = "["+country+"]"
+				// }
 				
-				firstNameList.push(country+ming)
+				firstNameList.push(ming)
 				lastNameList.push(xing)
 				
 				newItem.creators.push(
@@ -428,6 +434,7 @@ function completeDate(value) {
 	return value < 10 ? "0"+value:value;
 }
 
+
 /** BEGIN TEST CASES **/
 var testCases = [
 	{
@@ -497,6 +504,72 @@ var testCases = [
 		"type": "web",
 		"url": "https://book.douban.com/tag/认知心理学?type=S",
 		"items": "multiple"
+	},
+	{
+		"type": "web",
+		"url": "https://book.douban.com/subject/26871144/",
+		"items": [
+			{
+				"itemType": "book",
+				"title": "《法国男人这么装 - 绅士穿搭法则》18 评 7.0 #MODE MEN",
+				"creators": [
+					{
+						"firstName": "[法]朱利安",
+						"lastName": "斯卡维尼",
+						"creatorType": "author",
+						"fieldMode": true
+					},
+					{
+						"lastName": "盛柏",
+						"creatorType": "translator"
+					}
+				],
+				"date": "2016-8-1",
+				"ISBN": "9787542655684",
+				"abstractNote": "作者简介:\n作者简介\n朱利安·斯卡维尼，科班出身的建筑师，2012年开始在巴黎经营自己的店铺，在这之前曾经是一名自由裁缝。从2009年起，他给自己的博客stiff-collar.com撰稿并提供精美插图。\n\n译者简介\n盛柏，2006年10月在法国获得硕士学位后回国任教，研究的主要方向为法国现当代电影艺术、导演创作研究。2010年泰国朱拉隆功大学访问学者，2012年法国国立弗朗什-孔泰大学青年访问学者，现为复旦大学博士后。\n\n内容简介:\n腰封：伊夫·圣·罗兰说：“当我们穿得好的时候，什么都有可能发生。一件好衣服，是幸福的通行证。”\n封面：\n请您打开衣橱\n清点一下基本款的男装\n慢慢学会\n将它们好好搭配的技巧\n封底：\n向您展示男士衣橱里的10个基本款式；\n帮您找到与您搭配最为合适的衣着；\n为您提供颜色与图案相互组合的各种建议；\n教您掌握用配饰使个人风格更加完美；\n当然，还有贴心的服饰打理技巧和便于购买的商店地址。\n这是一本能帮您构建优雅风格必不可少的实用指南！\n通过色板给您呈现颜色和图案的搭配建议，一目了然！",
+				"extra": "D7.0 📅2021-04-19 10:44:57",
+				"libraryCatalog": "Douban",
+				"numPages": "220",
+				"place": "18人评分",
+				"publisher": "上海三联书店",
+				"rights": "68.00 元",
+				"shortTitle": "法国男人这么装",
+				"url": "https://book.douban.com/subject/26871144/",
+				"attachments": [],
+				"tags": [
+					{
+						"tag": "个人管理"
+					},
+					{
+						"tag": "文化研究"
+					},
+					{
+						"tag": "时尚"
+					},
+					{
+						"tag": "有趣"
+					},
+					{
+						"tag": "服装"
+					},
+					{
+						"tag": "法国文学"
+					},
+					{
+						"tag": "社会学"
+					},
+					{
+						"tag": "穿搭"
+					}
+				],
+				"notes": [
+					{
+						"note": "<h1>#摘录-《法国男人这么装》目录</h1>\n\n        前言……………………1<br>\n        衬衫……………………1<br>\n        针织衫…………………31<br>\n        裤子……………………47<br>\n        外套……………………69<br>\n        西服套装………………95<br>\n        领带……………………117<br>\n        大衣……………………137<br>\n        鞋………………………153<br>\n        内衣……………………175<br>\n        配饰……………………185<br>\n        参考书目………………205<br>\n        索引……………………208<br>\n     · · · · · ·     (<a href=\"javascript:$('#dir_26871144_full').hide();$('#dir_26871144_short').show();void(0);\">收起</a>)\n"
+					}
+				],
+				"seeAlso": []
+			}
+		]
 	}
 ]
 /** END TEST CASES **/

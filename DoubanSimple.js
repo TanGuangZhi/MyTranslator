@@ -1,7 +1,7 @@
 {
 	"translatorID": "fc353b26-8911-4c34-9196-f6f567c93901",
-	"label": "Douban",
-	"creator": "啊哈船长<tanguangzhi@foxmail.com>,Ace Strong<acestrong@gmail.com>",
+	"label": "DoubanSimple",
+	"creator": "氦客船长<TanGuangZhi@qq.com>,Ace Strong<acestrong@gmail.com>",
 	"target": "^https?://(www|book)\\.douban\\.com/(subject|doulist|people/[a-zA-Z._]*/(do|wish|collect)|.*?status=(do|wish|collect)|group/[0-9]*?/collection|tag)",
 	"minVersion": "2.0rc1",
 	"maxVersion": "",
@@ -9,7 +9,7 @@
 	"inRepository": true,
 	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2021-04-01 03:23:39"
+	"lastUpdated": "2021-05-20 10:32:46"
 }
 
 /*
@@ -156,24 +156,6 @@ function scrapeAndParse(doc, url) {
 			title = Zotero.Utilities.trim(trimTags(title))
 		}
 		newItem.title = title
-		// let titleTemp = ""
-		// pattern = /<h1>([\s\S]*?)<\/h1>/;
-		// if (pattern.test(page)) {
-		// 	var title = pattern.exec(page)[1];
-		// 	title = Zotero.Utilities.trim(trimTags(title))
-		// 	let originalTitlePre = " #"
-		// 	if(!originalTitle){ // 当没有原名时,使用空字符
-		// 		originalTitlePre = ""
-		// 	}
-		// 	if(title === subTitle){ // 判断下副标题与标题一样否,避免重复
-		// 		titleTemp = "《"+title+"》"+commentNum+" "+"评"+" "+dbScore+originalTitlePre+originalTitle
-		// 	} else {
-		// 		titleTemp = "《"+title+" - "+subTitle+"》"+commentNum+" "+"评"+" "+dbScore+originalTitlePre+originalTitle			
-		// 	}
-		// 	titleTemp = titleTemp.replace(/( - )?undefined/g,"").replace("null","0")
-		// 	newItem.title = titleTemp
-		// }
-		
 		
 		// 短标题
 		newItem.shortTitle = title
@@ -209,13 +191,6 @@ function scrapeAndParse(doc, url) {
 			var authorNames = trimTags(regexp.exec(page)[0]);
 			pattern = /(\[.*?\]|\(.*?\)|（.*?）)/g;
 			authorNames = authorNames.replace(pattern, "").split("/");
-			// 国家
-			let country = RegExp.$1
-			country = country.replace("美国","美")
-			country = country.match(/[一-龥]+/g)
-			if(country===null){
-				country = [" "]
-			}
 
 			// Zotero.debug(authorNames);
 			let firstNameList = [] // 作者名列表
@@ -247,15 +222,8 @@ function scrapeAndParse(doc, url) {
 					xing = authorNameTemp.pop()
 					ming = authorNameTemp.join("·")
 				}
-				if(country[i]){
-					country = country[i].replace(/<\/a>/g,"")
-				}
-			
-				if(country!=" "){
-					country = "["+country+"]"
-				}
 				
-				firstNameList.push(country+ming)
+				firstNameList.push(ming)
 				lastNameList.push(xing)
 				
 				newItem.creators.push({firstName:firstNameList[i],lastName:lastNameList[i], creatorType:"author", fieldMode:true});
@@ -439,6 +407,7 @@ function scrapeAndParse(doc, url) {
 		newItem.complete();
 	});
 }
+
 
 /** BEGIN TEST CASES **/
 var testCases = [
