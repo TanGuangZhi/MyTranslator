@@ -17,19 +17,29 @@
 
 # 4. 已新增/优化的translator✅
 ## 4.1. 已新增
-### 4.1.1. 少数派-->[SSPai.js](https://github.com/Captain2021/myTranslator/blob/master/SSPai.js)
+### 4.1.1. 少数派-->[SSPai.js](https://github.com/Captain2021/myTranslator/blob/main/SSPai.js)
 1. 标题、作者、摘要、发文时间
-2. 所属站点、评论数、充电数、url
+2. 所属站点、评论数、充电数、url、版权
 3. 网页快照
+[详细截图展示](https://github.com/Captain2021/MyTranslator/blob/main/ShowDetail.md#SSPai)
 
-### 4.1.2. 36Kr-->[Kr36.js](https://github.com/Captain2021/myTranslator/blob/master/Kr36.js)
+### 4.1.2. 36Kr-->[Kr36.js](https://github.com/Captain2021/myTranslator/blob/main/Kr36.js)
 1. 标题、作者、摘要、发文时间
-2. 点赞数、url
+2. 点赞数、url、版权
 3. 网页快照
 
 [详细截图展示](https://github.com/Captain2021/MyTranslator/blob/main/ShowDetail.md#36Kr)
+
+### 4.1.3. 财新网-->[CaiXin.js](https://github.com/Captain2021/myTranslator/blob/main/CaiXin.js)
+1. 标题、作者（多作者）、摘要、发文时间
+2. url、版权
+3. 网页快照
+
+
+[详细截图展示](https://github.com/Captain2021/MyTranslator/blob/main/ShowDetail.md#CaiXin)
+
 ## 4.2. 已优化
-### 4.2.1. 豆瓣-->[DouBan.js](https://github.com/Captain2021/myTranslator/blob/master/Douban.js)
+### 4.2.1. 豆瓣-->[DouBan.js](https://github.com/Captain2021/myTranslator/blob/main/Douban.js)
 **1. 标题优化**  
  * 《标题-副标题》+豆瓣评价人数+豆瓣评分+原作名
 
