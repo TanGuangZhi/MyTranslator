@@ -18,11 +18,16 @@
 # 4. 已新增/优化的translator✅
 ## 4.1. 已新增
 ### 4.1.1. 少数派-->[SSPai.js](https://github.com/Captain2021/myTranslator/blob/master/SSPai.js)
-1. 标题、作者、摘要、发送时间
+1. 标题、作者、摘要、发文时间
 2. 所属站点、评论数、充电数、url
 3. 网页快照
 
-[详细截图展示](https://github.com/Captain2021/MyTranslator/blob/main/ShowDetail.md#SSPai)
+### 4.1.2. 36Kr-->[Kr36.js](https://github.com/Captain2021/myTranslator/blob/master/Kr36.js)
+1. 标题、作者、摘要、发文时间
+2. 点赞数、url
+3. 网页快照
+
+[详细截图展示](https://github.com/Captain2021/MyTranslator/blob/main/ShowDetail.md#36Kr)
 ## 4.2. 已优化
 ### 4.2.1. 豆瓣-->[DouBan.js](https://github.com/Captain2021/myTranslator/blob/master/Douban.js)
 **1. 标题优化**  
