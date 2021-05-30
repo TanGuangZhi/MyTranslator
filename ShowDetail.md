@@ -26,3 +26,6 @@ PS：这里可以全选后保存到zotero中的，因为一次剪藏太多时间
 
 # 3. <span id = "SSPai">少数派</span>
 ![](http://picbed.tgz666.top/20210528155526.png?roundPic/radius/25%7CimageView2/2/w/900/h/1456/format/jpg)
+
+# 4. <span id = "36Kr">36Kr</span>
+![](http://picbed.tgz666.top/20210530220221.png?roundPic/radius/25%7CimageView2/2/w/1000/h/1618)
