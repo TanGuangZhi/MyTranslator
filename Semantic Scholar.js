@@ -1,15 +1,15 @@
 {
 	"translatorID": "276cb34c-6861-4de7-a11d-c2e46fb8af28",
 	"label": "Semantic Scholar",
-	"creator": "Guy Aglionby",
-	"target": "^https?://(www\\.semanticscholar\\.org/paper/.+|pdfs\\.semanticscholar\\.org/)",
+	"creator": "Guy Aglionby,氦客船长<TanGuangZhi@qq.com>",
+	"target": "^https?:\\/\\/(www\\.semanticscholar\\.org\\/(paper|author)\\/.+|pdfs\\.semanticscholar\\.org\\/)",
 	"minVersion": "3.0",
 	"maxVersion": "",
 	"priority": 100,
 	"inRepository": true,
 	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2021-04-07 07:30:05"
+	"lastUpdated": "2021-06-05 15:15:07"
 }
 
 /*
@@ -36,16 +36,22 @@
 */
 
 // See also https://github.com/zotero/translators/blob/master/BibTeX.js
-var bibtex2zoteroTypeMap = {
+let bibtex2zoteroTypeMap = {
 	inproceedings: "conferencePaper",
 	conference: "conferencePaper",
 	article: "journalArticle"
 };
 
-function detectWeb(doc) {
+function detectWeb(doc, url) {
 	let citation = ZU.xpathText(doc, '//pre[@class="bibtex-citation"]');
-	let type = citation.split('{')[0].replace('@', '');
-	return bibtex2zoteroTypeMap[type];
+	if (citation) {
+		let citation = ZU.xpathText(doc, '//pre[@class="bibtex-citation"]');
+		let type = citation.split('{')[0].replace('@', '');
+		return bibtex2zoteroTypeMap[type];
+	} else if (url.includes("/author/")) {
+		return "multiple"
+	}
+
 }
 
 function doWeb(doc, url) {
@@ -54,18 +60,55 @@ function doWeb(doc, url) {
 		let paperId = urlComponents[3] + urlComponents[4].replace('.pdf', '');
 		const API_URL = 'https://api.semanticscholar.org/';
 		ZU.processDocuments(API_URL + paperId, parseDocument);
+	} else if (detectWeb(doc, url) == "multiple") {
+		let itemInfo = {};
+		Zotero.selectItems(getSearchResults(doc, false, itemInfo), function (selectedItems) {
+			var multScrapId = [];
+			for (let link in selectedItems) {
+			   multScrap(link)
+			}
+		});
+
 	}
 	else {
 		parseDocument(doc, url);
 	}
 }
 
+
+function getSearchResults(doc, checkOnly, itemInfo) {
+	
+	let items = {};
+	let found = false;
+	let allLinks = doc.querySelectorAll('a[data-selenium-selector="title-link"]');
+	let allTitle = doc.querySelectorAll('div.cl-paper-title');
+	let showTitle = []
+   
+	for (let i = 0; i < allLinks.length; i++) {
+		let link = "https://www.semanticscholar.org" + allLinks[i].getAttribute('href');
+		showTitle = allTitle[i].innerText
+		found = true;
+		itemInfo[link] = link;
+		items[link] = showTitle;
+	}
+	return found ? items : false;
+}
+
+function multScrap(multScrapId) {
+	ZU.doGet(multScrapId, function(text){
+		var parser = new DOMParser();
+		var doc = parser.parseFromString(text, "text/html");
+		parseDocument(doc, multScrapId)
+	})
+}
+
 function parseDocument(doc, url) {
+	
 	let citation = ZU.xpathText(doc, '//pre[@class="bibtex-citation"]');
 	let type = citation.split('{')[0].replace('@', '');
 	const itemType = bibtex2zoteroTypeMap[type];
 
-	var item = new Zotero.Item(itemType);
+	let item = new Zotero.Item(itemType);
 
 	// load structured schema data
 	const schemaTag = doc.querySelector("script.schema-data");
@@ -84,34 +127,42 @@ function parseDocument(doc, url) {
 	item.date = article.datePublished;
 
 	// viewOnSageUrl 
-	let viewOnSageUrlList = ZU.xpath(doc, '//div[@class="flex-item primary-paper-link-button"]')
-	let viewOnSageUrl = viewOnSageUrlList[0].innerHTML
-	viewOnSageUrl.match(/href="(http.+\d)">/g)
-	viewOnSageUrl = RegExp.$1
-	item.url = viewOnSageUrl
+	// let viewOnSageUrlList = ZU.xpath(doc, '//div[@class="flex-item primary-paper-link-button"]')
 	
+	// let viewOnSageUrl = viewOnSageUrlList[0].innerHTML
+	// viewOnSageUrl.match(/href="(http.+\d)">/g)
+	// viewOnSageUrl = RegExp.$1
+	// item.url = viewOnSageUrl
+	
+	// citation_pdf_url
+	
+	if(doc.head.querySelector('[name="citation_pdf_url"]')){
+		let citationPdfUrl = doc.head.querySelector('[name="citation_pdf_url"]').content
+		item.url = citationPdfUrl
+	} else {
+		item.url = url
+	}
+		
+
 	// 现在的时间
 	let nowDate = getNowFormatTime()
-	
-	// tags
-	let tagsList = ZU.xpathText(doc, '//li[@class="paper-meta-item"]/following-sibling::li').split(",");
-	tagsList.shift() // 去除published Data
-	item.tags = tagsList
-	
-	// 期刊
-	let publication = tagsList[tagsList.length-1]
-	item.publicationTitle = publication
+
+	let tags = ZU.xpathText(doc, '//li[@class="paper-meta-item"]/following-sibling::li').split(",");
+	let publication = ""
+	if (tags) {
+		tags.shift() // 去除published Data
+		item.tags = tags
+		publication = tags[tags.length - 1]
+		item.publicationTitle = publication
+	}
 
 	// extra: 引用量
 	let references = ZU.xpathText(doc, '//span[@class="scorecard-stat__headline__dark"]');
-	references = references.match(/\d+/g)[0]
-	item.extra = "S"+references+" 📅"+nowDate
-	
-	// 界面转HTML
-	// let page2HtmlList = ZU.xpath(doc, '//div[@class="app-page__content"]')
-	// let page2Html = page2HtmlList[0].innerHTML
-	// item.notes.push({note:page2Html})  
-	
+	if (references) {
+		references = references.match(/\d+/g)[0]
+		item.extra = "S" + references + " 📅" + nowDate
+	}
+
 	item.attachments.push({
 		url: url,
 		title: "Semantic Scholar Link",
@@ -120,10 +171,12 @@ function parseDocument(doc, url) {
 	});
 
 	// if semantic scholar has a pdf as it's primary paper link it will appear in the about field
-	const paperLink = article.about.url;
-	
+	let paperLink = ""
+	if(paperLink){
+		paperLink = article.about.url;
+	}
+
 	if (paperLink.includes("pdfs.semanticscholar.org") || paperLink.includes("arxiv.org")) {
-		alert(1)
 		item.attachments.push({
 			url: paperLink,
 			title: "Full Text PDF",
@@ -144,31 +197,31 @@ function parseDocument(doc, url) {
 
 //获取当前日期，格式YYYY-MM-DD
 function getNowFormatDay(nowDate) {
-	var char = "-";
-	if(nowDate == null){
+	let char = "-";
+	if (nowDate == null) {
 		nowDate = new Date();
 	}
-	var day = nowDate.getDate();
-	var month = nowDate.getMonth() + 1;//注意月份需要+1
-	var year = nowDate.getFullYear();
+	let day = nowDate.getDate();
+	let month = nowDate.getMonth() + 1;//注意月份需要+1
+	let year = nowDate.getFullYear();
 	//补全0，并拼接
-	return year + char + completeDate(month) + char +completeDate(day);
+	return year + char + completeDate(month) + char + completeDate(day);
 }
 
 //获取当前时间，格式YYYY-MM-DD HH:mm:ss
 function getNowFormatTime() {
-	var nowDate = new Date();
-	var colon = ":";
-	var h = nowDate.getHours();
-	var m = nowDate.getMinutes();
-	var s = nowDate.getSeconds();
+	let nowDate = new Date();
+	let colon = ":";
+	let h = nowDate.getHours();
+	let m = nowDate.getMinutes();
+	let s = nowDate.getSeconds();
 	//补全0，并拼接
 	return getNowFormatDay(nowDate) + " " + completeDate(h) + colon + completeDate(m) + colon + completeDate(s);
 }
 
 //补全0
 function completeDate(value) {
-	return value < 10 ? "0"+value:value;
+	return value < 10 ? "0" + value : value;
 }
 /** BEGIN TEST CASES **/
 var testCases = [
