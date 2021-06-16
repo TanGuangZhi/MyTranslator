@@ -35,6 +35,11 @@
 2. url、版权
 3. 网页快照
 
+### 4.1.4. Goodreads-->[Goodreads.js](https://github.com/Captain2021/myTranslator/blob/main/Goodreads.js)
+1. 标题、作者（多作者）、摘要、出版时间
+2. ISBN、评级人数、评分、url
+3. 批量抓取某作者全部书籍
+
 
 [详细截图展示](https://github.com/Captain2021/MyTranslator/blob/main/ShowDetail.md#CaiXin)
 
