@@ -9,7 +9,7 @@
 	"inRepository": true,
 	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2021-04-23 15:46:29"
+	"lastUpdated": "2021-06-16 09:58:03"
 }
 
 /*
@@ -168,8 +168,8 @@ function scrapeAndParse(doc, url) {
 		}
 		newItem.title = title
 		
-		// 短标题
-			newItem.shortTitle = title
+		// 短标题-->原作名
+			newItem.shortTitle = originalTitle
 
 		// 目录
 		let catalogueList = ZU.xpath(doc, "//div[@class='indent' and contains(@id, 'dir_') and contains(@id, 'full')]")
@@ -433,6 +433,7 @@ function getNowFormatTime() {
 function completeDate(value) {
 	return value < 10 ? "0"+value:value;
 }
+
 
 
 /** BEGIN TEST CASES **/

@@ -1,15 +1,15 @@
 {
 	"translatorID": "4355f8a9-3d1a-4cd6-ba02-1a458c3d81e1",
 	"label": "Goodreads",
-	"creator": "啊哈船长<TanGuangZhi@foxmail.com>",
-	"target": "https://www.goodreads.com/book/.+",
+	"creator": "氦客船长<TanGuangZhi@foxmail.com>",
+	"target": "https://www.goodreads.com/author|book/.*",
 	"minVersion": "3.0",
 	"maxVersion": "",
 	"priority": 100,
 	"inRepository": true,
 	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2021-04-16 10:00:31"
+	"lastUpdated": "2021-06-16 10:17:40"
 }
 
 /*
@@ -51,7 +51,7 @@ function getSearchResults(doc, checkOnly) {
 	var items = {};
 	var found = false;
 	// TODO: adjust the CSS selector
-	var rows = doc.querySelectorAll('h2>a.title[href*="/article/"]');
+	var rows = doc.querySelectorAll('a[class="bookTitle"]');
 	for (let row of rows) {
 		// TODO: check and maybe adjust
 		let href = row.href;
@@ -99,13 +99,16 @@ function scrape(doc, url){
 	
 	// 摘要
 	let GrAbstractList = ZU.xpath(doc, '//div[@id="description"]/span')
-	let GrAbstract = GrAbstractList[0].innerHTML
-	if(GrAbstractList.length>1){
-		GrAbstract = GrAbstractList[1].innerHTML
+	if(GrAbstractList.length>0){
+		let GrAbstract = GrAbstractList[0].innerHTML
+		if(GrAbstractList.length>1){
+			GrAbstract = GrAbstractList[1].innerHTML
+		}
+		GrAbstract = GrAbstract.replace(/<br>/g,"\n")
+		GrAbstract = GrAbstract.replace(/<\/?\w+>/g,"")
+		newItem.abstractNote = GrAbstract
 	}
-	GrAbstract = GrAbstract.replace(/<br>/g,"\n")
-	GrAbstract = GrAbstract.replace(/<\/?\w+>/g,"")
-	newItem.abstractNote = GrAbstract
+
 	
 	// 评分
 	let nowTime = getNowFormatTime()
@@ -121,7 +124,7 @@ function scrape(doc, url){
 	let GrRatingsList = ZU.xpath(doc, '//meta[@itemprop="ratingCount"]')
 	let GrRatings = GrRatingsList[0].content
 	GrRatings= GrRatings.trim()+" ratings"
-	if(GrRatings==="  "||GrRatings===""){ 
+	if(GrRatings==="  "||GrRatings===""){
 		GrRatings = "?"
 	}
 	newItem.place = GrRatings
@@ -136,12 +139,21 @@ function scrape(doc, url){
 	let publisher = "" // 出版社
 	if(publishedTimeList){
 		publishedTime = publishedTimeList[0].innerText
-		publishedTime.match(/Published(.+)by(.+)/g)
-		publishedTime = RegExp.$1
-		publisher = RegExp.$2
+		if(publishedTime.includes("(first published")){
+			publishedTime.match(/(.*) \((.*)\)/g)
+			publishedTime = RegExp.$2
+			publisher = RegExp.$1
+			publishedTime = publishedTime.replace(/first published /g,"")
+			publisher.match(/.* by (.*)/g)
+			publisher = RegExp.$1
+		} else{
+			publishedTime.match(/Published(.+)by(.+)/g)
+			publishedTime = RegExp.$1
+			publisher = RegExp.$2
+		}
+	
 		// 英文格式的日期转yyyy-MM-dd
-		
-		if(!publishedTime===" "){
+		if(publishedTime){
 			publishedTime = stringDateToNum(publishedTime)
 		}
 		newItem.date = publishedTime
