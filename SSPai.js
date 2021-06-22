@@ -9,7 +9,7 @@
 	"inRepository": true,
 	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2021-05-28 07:45:40"
+	"lastUpdated": "2021-06-22 12:39:47"
 }
 
 /*
@@ -84,6 +84,14 @@ function scrape(doc, url) {
 	let siteName = doc.head.querySelector(':scope meta[property^="og:site_name"]').content
 	let pubDate = ZU.xpathText(doc, '//div[@class="timer"]')
 	pubDate = dateFormat(pubDate)
+	pubDate = pubDate.replace(/月/g,"-")
+	pubDate = pubDate.replace(/日/g,"")
+	if(!pubDate.includes("年")){
+		let date=new Date();
+		let year=date.getFullYear();
+		pubDate = year + "-"+ pubDate
+	}
+
 	let chargeNum = ZU.xpathText(doc, '//button[@class="btn btn-charge"]/following-sibling::span[@class="count"]')
 	let commentNum = ZU.xpathText(doc, '//button[@class="btn-mini btn-comment"]/following-sibling::span[@class="count"]')
 
@@ -125,19 +133,19 @@ function dateFormat(date) {
 
 
 Date.prototype.Format = function (fmt) {
-    var o = {
-        "M+": this.getMonth() + 1, //月份 
-        "d+": this.getDate(), //日 
-        "h+": this.getHours(), //小时 
-        "m+": this.getMinutes(), //分 
-        "s+": this.getSeconds(), //秒 
-        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
-        "S": this.getMilliseconds() //毫秒 
-    };
-    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-    for (var k in o)
-    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-    return fmt;
+	var o = {
+		"M+": this.getMonth() + 1, //月份 
+		"d+": this.getDate(), //日 
+		"h+": this.getHours(), //小时 
+		"m+": this.getMinutes(), //分 
+		"s+": this.getSeconds(), //秒 
+		"q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+		"S": this.getMilliseconds() //毫秒 
+	};
+	if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+	for (var k in o)
+	if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+	return fmt;
 }
  
 
