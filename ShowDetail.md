@@ -32,3 +32,9 @@ PS：这里可以全选后保存到zotero中的，因为一次剪藏太多时间
 
 # 5. <span id = "CaiXin">CaiXin</span>
 ![](http://picbed.tgz666.top/20210530235813.png?roundPic/radius/25%7CimageView2/2/w/1000/h/1618)
+
+# 6. <span id = "SemanticScholar">SemanticScholar</span>
+![](http://picbed.tgz666.top/20210629154122.png?roundPic/radius/25%7CimageView2/2/w/1000/h/1618)
+
+# 7. <span id = "CnkiScholar">CnkiScholar</span>
+![](http://picbed.tgz666.top/20210629154217.png?roundPic/radius/25%7CimageView2/2/w/1000/h/1618)

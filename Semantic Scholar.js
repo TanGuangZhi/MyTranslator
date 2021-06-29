@@ -9,7 +9,7 @@
 	"inRepository": true,
 	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2021-06-05 15:15:07"
+	"lastUpdated": "2021-06-22 02:59:11"
 }
 
 /*
@@ -65,7 +65,7 @@ function doWeb(doc, url) {
 		Zotero.selectItems(getSearchResults(doc, false, itemInfo), function (selectedItems) {
 			var multScrapId = [];
 			for (let link in selectedItems) {
-			   multScrap(link)
+				multScrap(link)
 			}
 		});
 
@@ -77,13 +77,13 @@ function doWeb(doc, url) {
 
 
 function getSearchResults(doc, checkOnly, itemInfo) {
-	
+
 	let items = {};
 	let found = false;
 	let allLinks = doc.querySelectorAll('a[data-selenium-selector="title-link"]');
 	let allTitle = doc.querySelectorAll('div.cl-paper-title');
 	let showTitle = []
-   
+
 	for (let i = 0; i < allLinks.length; i++) {
 		let link = "https://www.semanticscholar.org" + allLinks[i].getAttribute('href');
 		showTitle = allTitle[i].innerText
@@ -95,7 +95,7 @@ function getSearchResults(doc, checkOnly, itemInfo) {
 }
 
 function multScrap(multScrapId) {
-	ZU.doGet(multScrapId, function(text){
+	ZU.doGet(multScrapId, function (text) {
 		var parser = new DOMParser();
 		var doc = parser.parseFromString(text, "text/html");
 		parseDocument(doc, multScrapId)
@@ -103,7 +103,7 @@ function multScrap(multScrapId) {
 }
 
 function parseDocument(doc, url) {
-	
+
 	let citation = ZU.xpathText(doc, '//pre[@class="bibtex-citation"]');
 	let type = citation.split('{')[0].replace('@', '');
 	const itemType = bibtex2zoteroTypeMap[type];
@@ -128,38 +128,44 @@ function parseDocument(doc, url) {
 
 	// viewOnSageUrl 
 	// let viewOnSageUrlList = ZU.xpath(doc, '//div[@class="flex-item primary-paper-link-button"]')
-	
+
 	// let viewOnSageUrl = viewOnSageUrlList[0].innerHTML
 	// viewOnSageUrl.match(/href="(http.+\d)">/g)
 	// viewOnSageUrl = RegExp.$1
 	// item.url = viewOnSageUrl
-	
+
 	// citation_pdf_url
-	
-	if(doc.head.querySelector('[name="citation_pdf_url"]')){
+
+	if (doc.head.querySelector('[name="citation_pdf_url"]')) {
 		let citationPdfUrl = doc.head.querySelector('[name="citation_pdf_url"]').content
 		item.url = citationPdfUrl
 	} else {
 		item.url = url
 	}
-		
+
 
 	// 现在的时间
 	let nowDate = getNowFormatTime()
-
-	let tags = ZU.xpathText(doc, '//li[@class="paper-meta-item"]/following-sibling::li').split(",");
-	let publication = ""
-	if (tags) {
-		tags.shift() // 去除published Data
-		item.tags = tags
-		publication = tags[tags.length - 1]
-		item.publicationTitle = publication
+	try {
+		let tags = ZU.xpathText(doc, '//li[@class="paper-meta-item"]/following-sibling::li').split(",");
+		let publication = ""
+		if (tags) {
+			tags.shift() // 去除published Data
+			item.tags = tags
+			publication = tags[tags.length - 1]
+			item.publicationTitle = publication
+		}
+	} catch (error) {
+		Z.debug('=============error=============')
+		Z.debug(error)
 	}
 
 	// extra: 引用量
 	let references = ZU.xpathText(doc, '//span[@class="scorecard-stat__headline__dark"]');
 	if (references) {
-		references = references.match(/\d+/g)[0]
+		// 替换','数字分隔符,便于排序
+		references = references.replace(/,/g,"")
+		references = references.match(/\d+/g)
 		item.extra = "S" + references + " 📅" + nowDate
 	}
 
@@ -172,7 +178,7 @@ function parseDocument(doc, url) {
 
 	// if semantic scholar has a pdf as it's primary paper link it will appear in the about field
 	let paperLink = ""
-	if(paperLink){
+	if (paperLink) {
 		paperLink = article.about.url;
 	}
 
