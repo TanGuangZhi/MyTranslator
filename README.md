@@ -45,31 +45,11 @@
 
 ## 4.2. 已优化
 ### 4.2.1. 豆瓣-->[DouBan.js](https://github.com/Captain2021/myTranslator/blob/main/Douban.js)
-**1. 标题优化**  
- * 《标题-副标题》+豆瓣评价人数+豆瓣评分+原作名
+1. 标题、作者（多作者）、内容简介、作者简介、出版时间
+2. url、评分人数+时间、原作名、ISBN、豆瓣售价
+3. 图书目录
 
-**2. 作者优化**  
-* 欧美作者区分开了名与姓（在这里吐槽下豆瓣编辑对作者的命名规范，尤其是外籍作者的命名规范真是各种牛鬼蛇神，各命名各的谁也不管谁）
-
-**3. 摘要**  
-* 作者简介
-* 内容简介
-
-**4. 版权**  
-* 豆瓣界面给出的定价
-
-**5. 其他**  
-* 豆瓣评分+抓取评分时的时间
-
-**6. 附件**  
-
-* 目录存放至note附件里
-
-**7. 其他**
-
-* 此外提供极简版[DouBanSimple.js](https://github.com/Captain2021/myTranslator/blob/master/DoubanSimple.js) ，有觉得以上内容冗余可以使用极简版，主要是对标题与作者的简化
-
-**8. [截图展示](https://github.com/Captain2021/MyTranslator/blob/main/ShowDetail.md#DouBan)**  
+[详细截图展示](https://github.com/Captain2021/MyTranslator/blob/main/ShowDetail.md#DouBan)
 
 
 
