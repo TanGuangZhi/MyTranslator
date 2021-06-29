@@ -16,7 +16,7 @@
 
 
 # 4. 已新增/优化的translator✅
-## 4.1. 已新增
+## 4.1. 新增
 ### 4.1.1. 少数派-->[SSPai.js](https://github.com/Captain2021/myTranslator/blob/main/SSPai.js)
 1. 标题、作者、摘要、发文时间
 2. 所属站点、评论数、充电数、url、版权
@@ -43,7 +43,15 @@
 
 [详细截图展示](https://github.com/Captain2021/MyTranslator/blob/main/ShowDetail.md#CaiXin)
 
-## 4.2. 已优化
+
+### 4.1.5. CnkiScholar-->[CnkiScholar.js](https://github.com/Captain2021/myTranslator/blob/main/CnkiScholar.js)
+1. 标题、作者（多作者）、摘要、出版时间
+2. DOI、url
+3. 批量抓取期刊内容（Max50）
+
+[详细截图展示](https://github.com/Captain2021/MyTranslator/blob/main/ShowDetail.md#CnkiScholar)
+
+## 4.2. 优化
 ### 4.2.1. 豆瓣-->[DouBan.js](https://github.com/Captain2021/myTranslator/blob/main/Douban.js)
 1. 标题、作者（多作者）、内容简介、作者简介、出版时间
 2. url、评分人数+时间、原作名、ISBN、豆瓣售价
@@ -51,7 +59,11 @@
 
 [详细截图展示](https://github.com/Captain2021/MyTranslator/blob/main/ShowDetail.md#DouBan)
 
+## 4.2.2 Semantic Scholar-->[SemanticScholar.js](https://github.com/Captain2021/myTranslator/blob/main/SemanticScholar.js)
+1. 批量抓取某个作者的论文
+2. 引用量
 
+[详细截图展示](https://github.com/Captain2021/MyTranslator/blob/main/ShowDetail.md#SemanticScholar)
 
 # 5. 想进一步了解zotero？
 * 推荐加入——[阳老师的知识星球🌏 ](https://t.zsxq.com/qJuFqN3)
