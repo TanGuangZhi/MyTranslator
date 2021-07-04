@@ -1,15 +1,15 @@
 {
 	"translatorID": "fc353b26-8911-4c34-9196-f6f567c93901",
 	"label": "Douban",
-	"creator": "氦客船长<TanGuangZhi@foxmail.com>,Ace Strong<acestrong@gmail.com>",
-	"target": "^https?://(www|book)\\.douban\\.com/(subject|doulist|people/[a-zA-Z._]*/(do|wish|collect)|.*?status=(do|wish|collect)|group/[0-9]*?/collection|tag)",
+	"creator": "Ace Strong<acestrong@gmail.com>,氦客船长<TanGuangZhi@foxmail.com>",
+	"target": "^https?://(www|book)\\.douban\\.com/(series|subject|doulist|people/[a-zA-Z._]*/(do|wish|collect)|.*?status=(do|wish|collect)|group/[0-9]*?/collection|tag)",
 	"minVersion": "2.0rc1",
 	"maxVersion": "",
 	"priority": 100,
 	"inRepository": true,
 	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2021-06-16 09:58:03"
+	"lastUpdated": "2021-06-25 07:37:46"
 }
 
 /*
@@ -49,7 +49,7 @@
 
 
 function detectWeb(doc, url) {
-	var pattern = /subject_search|doulist|people\/[a-zA-Z._]*?\/(?:do|wish|collect)|.*?status=(?:do|wish|collect)|group\/[0-9]*?\/collection|tag/;
+	var pattern = /subject_search|series|doulist|people\/[a-zA-Z._]*?\/(?:do|wish|collect)|.*?status=(?:do|wish|collect)|group\/[0-9]*?\/collection|tag/;
 
 	if (pattern.test(url)) {
 		return "multiple";
@@ -62,6 +62,8 @@ function detectWeb(doc, url) {
 function detectTitles(doc, url) {
 	var pattern = /\.douban\.com\/tag\//;
 	if (pattern.test(url)) {
+		return ZU.xpath(doc, '//div[@class="info"]/h2/a');
+	} else if(url.includes('series')){
 		return ZU.xpath(doc, '//div[@class="info"]/h2/a');
 	} else {
 		return ZU.xpath(doc, '//div[@class="title"]/a');
@@ -92,8 +94,8 @@ function doWeb(doc, url) {
 			}
 			for (var i in items) {
 				articles.push(i);
+				scrapeAndParse(doc, i);
 			}
-			Zotero.Utilities.processDocuments(articles, scrapeAndParse(doc, url));
 		});
 	}
 	else {
@@ -118,10 +120,10 @@ function scrapeAndParse(doc, url) {
 
 		// 评分
 		let dbScore = ZU.xpathText(doc, '//*[@id="interest_sectl"]/div[1]/div[2]/strong')
-		dbScore= dbScore.trim()
-		if(dbScore==="  "||dbScore===""){
+		if(!dbScore){
 			dbScore = "?"
 		}
+		dbScore= dbScore.trim()
 		
 		// 评价人数
 		let commentNum = ZU.xpathText(doc, '//*[@id="interest_sectl"]/div[1]/div[2]/div/div[2]/span/a/span')
@@ -169,15 +171,18 @@ function scrapeAndParse(doc, url) {
 		newItem.title = title
 		
 		// 短标题-->原作名
-			newItem.shortTitle = originalTitle
+		newItem.shortTitle = originalTitle
 
 		// 目录
-		let catalogueList = ZU.xpath(doc, "//div[@class='indent' and contains(@id, 'dir_') and contains(@id, 'full')]")
-		let catalogue = ""
-		if(catalogueList.length>0){
-			catalogue = "<h1>#摘录-《"+title+"》目录</h1>\n"+catalogueList[0].innerHTML
-			newItem.notes.push({note:catalogue})
+		// let catalogueList = ZU.xpath(doc, "//div[@class='indent' and contains(@id, 'dir_') and contains(@id, 'full')]")
+		pattern = /<div class="indent" id="dir_\d+_full".*>([\s\S]*?)<\/div>/
+		if (pattern.test(page)) {
+			let catalogue = pattern.exec(page)[1];
+				catalogue = "<h1>#摘录-《"+title+"》目录</h1>\n"+catalogue
+				catalogue = catalogue.replace(/·+.*\(<a.*收起.*<\/a>\)/g,"")
+				newItem.notes.push({note:catalogue})
 		}
+	
 		
 
 		// 作者
