@@ -9,7 +9,7 @@
 	"inRepository": true,
 	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2021-09-22 08:37:25"
+	"lastUpdated": "2021-09-22 08:54:37"
 }
 
 /*
@@ -372,7 +372,14 @@ function scrapeAndParse(doc, url) {
 		
 		// 作者简介
 		// let authorInfoList = ZU.xpath(doc, "//span[text()='作者简介']/parent::h2/following-sibling::div//div[@class='intro']")
-		let authorInfo = pageDoc.querySelectorAll('div.related_info div.indent  div[class=""] div.intro p')[1].textContent
+		let authorInfo = ""
+		try{
+			authorInfo = pageDoc.querySelectorAll('div.related_info div.indent  div[class=""] div.intro p')[1].textContent
+		} catch{
+			
+		}
+		
+		
 		
 		// 这里会获取平级的元素,当有多个时(有展开全部按钮)取最后一个
 		// let authorInfo = ""
@@ -390,7 +397,12 @@ function scrapeAndParse(doc, url) {
 		// 内容简介
 		// 获取展开全部按钮里面的内容
 		// let contentInfoList = ZU.xpath(doc, "//span[text()='内容简介']/parent::h2/following-sibling::div[@id='link-report']//div[@class='intro']")
-		let contentInfo = pageDoc.querySelector('div#link-report div div p').textContent
+		let contentInfo = ""
+		try{
+			contentInfo = pageDoc.querySelector('div#link-report div div p').textContent
+		} catch{
+			
+		}
 		// let contentInfo = ""
 		// let contentInfoTwo = ""
 		// if(contentInfoList.length>0){
