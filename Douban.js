@@ -9,7 +9,7 @@
 	"inRepository": true,
 	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2021-06-25 07:37:46"
+	"lastUpdated": "2021-09-22 08:37:25"
 }
 
 /*
@@ -112,6 +112,14 @@ function trimTags(text) {
 
 function scrapeAndParse(doc, url) {
 	Zotero.Utilities.HTTP.doGet(url, function (page) {
+		
+		// doGet方法返回值处理,方便后续选择器的使用
+		let resText = page
+		var parser = new DOMParser();
+		var pageDoc = parser.parseFromString(resText, "text/html");
+// Z.debug('=============page=============')
+// Z.debug(pageDoc.querySelector('div#link-report div div p'))
+
 		var pattern;
 		// 类型 & URL
 		var itemType = "book";
@@ -119,15 +127,17 @@ function scrapeAndParse(doc, url) {
 		newItem.url = url;
 
 		// 评分
-		let dbScore = ZU.xpathText(doc, '//*[@id="interest_sectl"]/div[1]/div[2]/strong')
+		// let dbScore = ZU.xpathText(doc, '//*[@id="interest_sectl"]/div/div/strong')
+		let dbScore = pageDoc.querySelector('strong[class = "ll rating_num "]').textContent
 		if(!dbScore){
 			dbScore = "?"
 		}
 		dbScore= dbScore.trim()
 		
 		// 评价人数
-		let commentNum = ZU.xpathText(doc, '//*[@id="interest_sectl"]/div[1]/div[2]/div/div[2]/span/a/span')
-		newItem.place = commentNum+"人评分"
+		// let commentNum = ZU.xpathText(doc, '//*[@id="interest_sectl"]/div[1]/div[2]/div/div[2]/span/a/span')
+		// let commentNum = pageDoc.querySelector('a[class = "rating_people"]').textContent
+		// newItem.place = commentNum+"人评分"
 		
 		// 副标题
 		pattern = /<span [^>]*?>副标题:<\/span>(.*?)<br\/>/;
@@ -142,33 +152,33 @@ function scrapeAndParse(doc, url) {
 			originalTitle = originalTitle.replace(/：/g,": ")
 		}
 		
-		// 标题
-		// let titleTemp = ""
-		// pattern = /<h1>([\s\S]*?)<\/h1>/;
-		// if (pattern.test(page)) {
-		// 	var title = pattern.exec(page)[1];
-		// 	title = Zotero.Utilities.trim(trimTags(title))
-		// 	let originalTitlePre = " #"
-		// 	if(!originalTitle){ // 当没有原名时,使用空字符
-		// 		originalTitlePre = ""
-		// 	}
-		// 	if(title === subTitle){ // 判断下副标题与标题一样否,避免重复
-		// 		titleTemp = "《"+title+"》"+commentNum+" "+"评"+" "+dbScore+originalTitlePre+originalTitle
-		// 	} else {
-		// 		titleTemp = "《"+title+" - "+subTitle+"》"+commentNum+" "+"评"+" "+dbScore+originalTitlePre+originalTitle			
-		// 	}
-		// 	titleTemp = titleTemp.replace(/( - )?undefined/g,"").replace("null","0")
-		// 	titleTemp = titleTemp.replace(/&#39;/g,"'") // 替换部分ASCLL码
-		// 	newItem.title = titleTemp
-		// }
-
-		// 极简版标题
+		//标题
+		let titleTemp = ""
 		pattern = /<h1>([\s\S]*?)<\/h1>/;
 		if (pattern.test(page)) {
 			var title = pattern.exec(page)[1];
 			title = Zotero.Utilities.trim(trimTags(title))
+			let originalTitlePre = " #"
+			if(!originalTitle){ // 当没有原名时,使用空字符
+				originalTitlePre = ""
+			}
+			if(title === subTitle || !subTitle){ // 判断下副标题与标题一样否,避免重复
+				titleTemp = title
+			} else {
+				titleTemp = title+"-"+subTitle
+			}
+			titleTemp = titleTemp.replace(/( - )?undefined/g,"").replace("null","0")
+			titleTemp = titleTemp.replace(/&#39;/g,"'") // 替换部分ASCLL码
+			newItem.title = titleTemp
 		}
-		newItem.title = title
+
+		// // 极简版标题
+		// pattern = /<h1>([\s\S]*?)<\/h1>/;
+		// if (pattern.test(page)) {
+		// 	var title = pattern.exec(page)[1];
+		// 	title = Zotero.Utilities.trim(trimTags(title))
+		// }
+		// newItem.title = title
 		
 		// 短标题-->原作名
 		newItem.shortTitle = originalTitle
@@ -361,36 +371,41 @@ function scrapeAndParse(doc, url) {
 		}
 		
 		// 作者简介
-		let authorInfoList = ZU.xpath(doc, "//span[text()='作者简介']/parent::h2/following-sibling::div//div[@class='intro']")
+		// let authorInfoList = ZU.xpath(doc, "//span[text()='作者简介']/parent::h2/following-sibling::div//div[@class='intro']")
+		let authorInfo = pageDoc.querySelectorAll('div.related_info div.indent  div[class=""] div.intro p')[1].textContent
+		
 		// 这里会获取平级的元素,当有多个时(有展开全部按钮)取最后一个
-		let authorInfo = ""
-		let authorInfotwo = ""
-		if(authorInfoList.length>0){
-			authorInfo = authorInfoList[authorInfoList.length-1].innerHTML
-			// 正则提取<p>标签里面的元素,并添加换行
-			authorInfo = authorInfo.match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
-			for(i=0;i<authorInfo.length;i++){
-			authorInfo[i] = authorInfo[i].match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
-			authorInfotwo = authorInfotwo+RegExp.$1+"\n"
-			}
-		}
+		// let authorInfo = ""
+		// let authorInfotwo = ""
+		// if(authorInfoList.length>0){
+		// 	authorInfo = authorInfoList[authorInfoList.length-1].innerHTML
+		// 	// 正则提取<p>标签里面的元素,并添加换行
+		// 	authorInfo = authorInfo.match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
+		// 	for(i=0;i<authorInfo.length;i++){
+		// 	authorInfo[i] = authorInfo[i].match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
+		// 	authorInfotwo = authorInfotwo+RegExp.$1+"\n"
+		// 	}
+		// }
 		
 		// 内容简介
 		// 获取展开全部按钮里面的内容
-		let contentInfoList = ZU.xpath(doc, "//span[text()='内容简介']/parent::h2/following-sibling::div[@id='link-report']//div[@class='intro']")
-		let contentInfo = ""
-		let contentInfoTwo = ""
-		if(contentInfoList.length>0){
-			contentInfo = contentInfoList[contentInfoList.length-1].innerHTML
-			contentInfo = contentInfo.match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
-			for(i=0;i<contentInfo.length;i++){
-			contentInfo[i] = contentInfo[i].match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
-			contentInfoTwo = contentInfoTwo+RegExp.$1+"\n"
-			}
-		}
+		// let contentInfoList = ZU.xpath(doc, "//span[text()='内容简介']/parent::h2/following-sibling::div[@id='link-report']//div[@class='intro']")
+		let contentInfo = pageDoc.querySelector('div#link-report div div p').textContent
+		// let contentInfo = ""
+		// let contentInfoTwo = ""
+		// if(contentInfoList.length>0){
+		// 	contentInfo = contentInfoList[contentInfoList.length-1].innerHTML
+		// 	contentInfo = contentInfo.match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
+		// 	for(i=0;i<contentInfo.length;i++){
+		// 	contentInfo[i] = contentInfo[i].match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
+		// 	contentInfoTwo = contentInfoTwo+RegExp.$1+"\n"
+		// 	}
+		// }
 		
-		let abstractNoteTemp = "作者简介:"+"\n"+authorInfotwo+"\n"+
-		"内容简介:"+"\n"+contentInfoTwo
+		// let abstractNoteTemp = "作者简介:"+"\n"+authorInfotwo+"\n"+
+		// "内容简介:"+"\n"+contentInfoTwo		
+		let abstractNoteTemp = "作者简介:"+"\n"+authorInfo+"\n"+
+		"内容简介:"+"\n"+contentInfo
 
 		newItem.abstractNote = abstractNoteTemp
 		
