@@ -9,7 +9,7 @@
 	"inRepository": true,
 	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2021-09-25 05:34:20"
+	"lastUpdated": "2021-09-25 13:46:24"
 }
 
 /*
@@ -79,69 +79,94 @@ function doWeb(doc, url) {
 function scrape(doc, url) {
 	// 新建item
 	let newItem = new Zotero.Item("film");
-	let title = doc.querySelector('span[property="v:itemreviewed"]').textContent
-	let date = doc.querySelector('span[property="v:initialReleaseDate"]').textContent
-	let runTime = doc.querySelector('span[property="v:runtime"]').textContent
-	
+	let title = getSelectorData(doc, 'span[property="v:itemreviewed"]', "textContent")
+
+	let date = getSelectorData(doc, 'span[property="v:initialReleaseDate"]', "textContent")
+	let runTime = getSelectorData(doc, 'span[property="v:runtime"]', "textContent")
+
 	let director = ZU.xpathText(doc, '//span/span[contains(text(),"导演")]/following-sibling::span')
 	let scriptwriter = ZU.xpathText(doc, '//span/span[contains(text(),"编剧")]/following-sibling::span')
 	let starring = ZU.xpathText(doc, '//span/span[contains(text(),"主演")]/following-sibling::span')
-	
-	let abs = doc.querySelector('span[property="v:summary"]').textContent
-	
-	let dbScore = doc.querySelector('strong[property="v:average"]').textContent
-	let dbScoreNum = doc.querySelector('span[property="v:votes"]').textContent
-	
+
+	let abs = getSelectorData(doc, 'span[property="v:summary"]', "textContent")
+
+	let dbScore = getSelectorData(doc, 'strong[property="v:average"]', "textContent")
+
+	let dbScoreNum = getSelectorData(doc, 'span[property="v:votes"]', "textContent")
+
 	// 现在的时间
-	let nowTime = getNowFormatTime() 
-	
+	let nowTime = getNowFormatTime()
+
 	// tags-->类型
-	let genreList = doc.querySelectorAll('span[property="v:genre"]')
-	for(let temp of genreList){
-		temp = temp.textContent
+	try {
+		let genreList = doc.querySelectorAll('span[property="v:genre"]')
+		for (let temp of genreList) {
+			temp = temp.textContent
 			newItem.tags.push(temp);
+		}
+	} catch (error) {
+
 	}
 
 	// 豆瓣电影中多编剧之间用/隔开,这里将他们拆分为列表,然后在单独处理
-	let scriptwriterList = scriptwriter.split("/")
-	for(let temp of scriptwriterList){
-			newItem.creators.push(ZU.cleanAuthor(temp,"scriptwriter"));
+	try {
+		let scriptwriterList = scriptwriter.split("/")
+		for (let temp of scriptwriterList) {
+			newItem.creators.push(ZU.cleanAuthor(temp, "scriptwriter"));
+		}
+	} catch (error) {
+
 	}
 	
 	// 主演同编剧一样
-	let starringList = starring.split("/")
-		for(let temp of starringList){
-			newItem.creators.push(ZU.cleanAuthor(temp,"contributor"));
+	try {
+		let starringList = starring.split("/")
+		for (let temp of starringList) {
+			newItem.creators.push(ZU.cleanAuthor(temp, "contributor"));
+		}
+	} catch (error) {
+
 	}
 	
 	// 导演同编剧一样
-	let directorList = director.split("/")
-	for(let temp of directorList){
-			newItem.creators.push(ZU.cleanAuthor(temp,"director"));
+	try {
+		let directorList = director.split("/")
+		for (let temp of directorList) {
+			newItem.creators.push(ZU.cleanAuthor(temp, "director"));
+		}
+	} catch (error) {
+
 	}
-	
-	
 	newItem.title = title
 	newItem.abstractNote = abs
 	newItem.runningTime = runTime
 	newItem.date = date
-	newItem.extra = dbScore+"分 "+dbScoreNum+"人" + " 📅"+nowTime
-	newItem.url = url 
+	newItem.extra = dbScore + "分 " + dbScoreNum + "人" + " 📅" + nowTime
+	newItem.url = url
 	// newItem.notes.push({note:""})
 	newItem.complete();
+}
+
+function getSelectorData(doc, selector, selectorAttr) {
+	let data = doc.querySelector(selector)
+	if (data && data[selectorAttr]) {
+		return data[selectorAttr]
+	} else {
+		return ""
+	}
 }
 
 //获取当前日期，格式YYYY-MM-DD
 function getNowFormatDay(nowDate) {
 	var char = "-";
-	if(nowDate == null){
+	if (nowDate == null) {
 		nowDate = new Date();
 	}
 	var day = nowDate.getDate();
 	var month = nowDate.getMonth() + 1;//注意月份需要+1
 	var year = nowDate.getFullYear();
 	//补全0，并拼接
-	return year + char + completeDate(month) + char +completeDate(day);
+	return year + char + completeDate(month) + char + completeDate(day);
 }
 
 //获取当前时间，格式YYYY-MM-DD HH:mm:ss
@@ -157,7 +182,7 @@ function getNowFormatTime() {
 
 //补全0
 function completeDate(value) {
-	return value < 10 ? "0"+value:value;
+	return value < 10 ? "0" + value : value;
 }
 
 
