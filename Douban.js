@@ -9,7 +9,7 @@
 	"inRepository": true,
 	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2021-09-27 08:58:06"
+	"lastUpdated": "2021-09-27 12:33:29"
 }
 
 /*
@@ -117,8 +117,6 @@ function scrapeAndParse(doc, url) {
 		let resText = page
 		var parser = new DOMParser();
 		var pageDoc = parser.parseFromString(resText, "text/html");
-// Z.debug('=============page=============')
-// Z.debug(pageDoc.querySelector('div#link-report div div p'))
 
 		var pattern;
 		// 类型 & URL
@@ -370,11 +368,20 @@ function scrapeAndParse(doc, url) {
 			newItem.tags.push(tags[i].text);
 		}
 		
+		
 		// 作者简介
-		let authorInfoList = ZU.xpath(doc, "//span[text()='作者简介']/parent::h2/following-sibling::div//div[@class='intro']")
+		// let authorInfoList = ZU.xpath(doc, "//span[text()='作者简介']/parent::h2/following-sibling::div//div[@class='intro']")
+		
 		// let authorInfo = ""
 		// try{
-		// 	authorInfo = pageDoc.querySelectorAll('div.related_info div.indent  div[class=""] div.intro')[1].textContent
+		// 	authorInfo = pageDoc.querySelector('div.online-partner+h2+div.indent span.all div.intro')
+		// 	if(authorInfo){
+		// 		authorInfo = authorInfo.textContent
+		// 	}else if(pageDoc.querySelector('h2+div.indent span.short div.intro')){
+		// 		authorInfo = pageDoc.querySelector('div.online-partner+h2+div.indent div div').textContent
+		// 	}else{
+		// 		authorInfo = pageDoc.querySelector('h2+div.indent span.short div.intro').textContent
+		// 	}
 		// } catch{
 			
 		// }
@@ -382,56 +389,92 @@ function scrapeAndParse(doc, url) {
 		
 		
 		// 这里会获取平级的元素,当有多个时(有展开全部按钮)取最后一个
-		let authorInfo = ""
-		let authorInfotwo = ""
-		if(authorInfoList.length>0){
-			authorInfo = authorInfoList[authorInfoList.length-1].innerHTML
-			// 正则提取<p>标签里面的元素,并添加换行
-			authorInfo = authorInfo.match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
-			for(i=0;i<authorInfo.length;i++){
-			authorInfo[i] = authorInfo[i].match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
-			authorInfotwo = authorInfotwo+RegExp.$1+"\n"
-			}
-		}
+		// let authorInfo = ""
+		// let authorInfotwo = ""
+		// if(authorInfoList.length>0){
+		// 	authorInfo = authorInfoList[authorInfoList.length-1].innerHTML
+		// 	// 正则提取<p>标签里面的元素,并添加换行
+		// 	authorInfo = authorInfo.match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
+		// 	for(i=0;i<authorInfo.length;i++){
+		// 	authorInfo[i] = authorInfo[i].match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
+		// 	authorInfotwo = authorInfotwo+RegExp.$1+"\n"
+		// 	}
+		// }
 		
 		// 内容简介
 		// 获取展开全部按钮里面的内容
-		let contentInfoList = ZU.xpath(doc, "//span[text()='内容简介']/parent::h2/following-sibling::div[@id='link-report']//div[@class='intro']")
+		// let contentInfoList = ZU.xpath(doc, "//span[text()='内容简介']/parent::h2/following-sibling::div[@id='link-report']//div[@class='intro']")
 		// let contentInfo = ""
 		// try{
-		// 	contentInfo = pageDoc.querySelector('div#link-report div div').textContent
+		// 	contentInfo = pageDoc.querySelector('div#link-report span.all div.intro')
+		// 	if(contentInfo){
+		// 		contentInfo = contentInfo.textContent
+		// 	}else if(pageDoc.querySelector('div#link-report span.short div')){
+		// 		contentInfo = pageDoc.querySelector('div#link-report span.short div').textContent
+		// 	}else{
+		// 		contentInfo = pageDoc.querySelector('div#link-report div div.intro').textContent
+		// 	}
 		// } catch{
 			
 		// }
-		let contentInfo = ""
-		let contentInfoTwo = ""
-		if(contentInfoList.length>0){
-			contentInfo = contentInfoList[contentInfoList.length-1].innerHTML
-			contentInfo = contentInfo.match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
-			for(i=0;i<contentInfo.length;i++){
-			contentInfo[i] = contentInfo[i].match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
-			contentInfoTwo = contentInfoTwo+RegExp.$1+"\n"
+		// let contentInfo = ""
+		// let contentInfoTwo = ""
+		// if(contentInfoList.length>0){
+		// 	contentInfo = contentInfoList[contentInfoList.length-1].innerHTML
+		// 	contentInfo = contentInfo.match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
+		// 	for(i=0;i<contentInfo.length;i++){
+		// 	contentInfo[i] = contentInfo[i].match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
+		// 	contentInfoTwo = contentInfoTwo+RegExp.$1+"\n"
+		// 	}
+		// }
+		
+		// let abstractNoteTemp = "作者简介:"+"\n"+authorInfotwo+"\n"+
+		// "内容简介:"+"\n"+contentInfoTwo	
+		
+		let contentInfo = "";
+		let authorInfo = "";
+		
+		try{
+		// 如果存在在线试读标签
+		if(pageDoc.querySelector('div.online-partner')){
+			// 判断内容与作者是否有展开按钮
+			// 内容有展开按钮
+			if(pageDoc.querySelector('div#link-report span.all div div')){
+				contentInfo = pageDoc.querySelector('div#link-report span.all div div').textContent
+			}else{
+				contentInfo = pageDoc.querySelector('div#link-report div div').textContent
+			}
+			
+			// 作者有展开按钮
+			if(pageDoc.querySelector('div.online-partner + h2 +div span.all div ')){
+				authorInfo = pageDoc.querySelector('div.online-partner + h2 +div span.all div ').textContent
+			}else{
+				authorInfo = pageDoc.querySelector('div.online-partner + h2 + div div div').textContent
+			}
+		}else{
+			// 内容有展开按钮
+			if(pageDoc.querySelector('div#link-report span.all div div')){
+				contentInfo = pageDoc.querySelector('div#link-report span.all div div').textContent
+			}else{
+				contentInfo = pageDoc.querySelector('div#link-report div div').textContent	
+			}
+			
+			// 作者无展开按钮
+			if(pageDoc.querySelector('style+h2+div.indent div div.intro')){
+				authorInfo = pageDoc.querySelector('style+h2+div.indent div div.intro').textContent
+			}else{
+				authorInfo = pageDoc.querySelector('h2 +div span.all div').textContent
 			}
 		}
 		
-		let abstractNoteTemp = "作者简介:"+"\n"+authorInfotwo+"\n"+
-		"内容简介:"+"\n"+contentInfoTwo		
-		// let abstractNoteTemp = "作者简介:"+"\n"+authorInfo+"\n"+
-		// "内容简介:"+"\n"+contentInfo
+		}catch{
+			
+		}
+		
+		let abstractNoteTemp = "作者简介:"+authorInfo+"\n\n"+
+		"内容简介:"+contentInfo
 
 		newItem.abstractNote = abstractNoteTemp
-		
-	
-		// // 调用qk api,实现html转md
-		// var postUrl = "https://tools.getquicker.cn/api/MarkDown/Html2Markdown"
-		// let postData = "{\"source\":\"<h1>string</h1>\"}"
-		// let headers  = {
-		//  	Accept: "text/plain",
-		//  	"Content-Type": "application/json",
-		// }
-		// ZU.doPost(postUrl, postData, function(text){
-			
-		// }, headers)
 		
 		newItem.complete();
 	});
