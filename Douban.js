@@ -9,7 +9,7 @@
 	"inRepository": true,
 	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2021-09-22 08:54:37"
+	"lastUpdated": "2021-09-27 08:58:06"
 }
 
 /*
@@ -371,53 +371,53 @@ function scrapeAndParse(doc, url) {
 		}
 		
 		// 作者简介
-		// let authorInfoList = ZU.xpath(doc, "//span[text()='作者简介']/parent::h2/following-sibling::div//div[@class='intro']")
-		let authorInfo = ""
-		try{
-			authorInfo = pageDoc.querySelectorAll('div.related_info div.indent  div[class=""] div.intro p')[1].textContent
-		} catch{
+		let authorInfoList = ZU.xpath(doc, "//span[text()='作者简介']/parent::h2/following-sibling::div//div[@class='intro']")
+		// let authorInfo = ""
+		// try{
+		// 	authorInfo = pageDoc.querySelectorAll('div.related_info div.indent  div[class=""] div.intro')[1].textContent
+		// } catch{
 			
-		}
+		// }
 		
 		
 		
 		// 这里会获取平级的元素,当有多个时(有展开全部按钮)取最后一个
-		// let authorInfo = ""
-		// let authorInfotwo = ""
-		// if(authorInfoList.length>0){
-		// 	authorInfo = authorInfoList[authorInfoList.length-1].innerHTML
-		// 	// 正则提取<p>标签里面的元素,并添加换行
-		// 	authorInfo = authorInfo.match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
-		// 	for(i=0;i<authorInfo.length;i++){
-		// 	authorInfo[i] = authorInfo[i].match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
-		// 	authorInfotwo = authorInfotwo+RegExp.$1+"\n"
-		// 	}
-		// }
+		let authorInfo = ""
+		let authorInfotwo = ""
+		if(authorInfoList.length>0){
+			authorInfo = authorInfoList[authorInfoList.length-1].innerHTML
+			// 正则提取<p>标签里面的元素,并添加换行
+			authorInfo = authorInfo.match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
+			for(i=0;i<authorInfo.length;i++){
+			authorInfo[i] = authorInfo[i].match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
+			authorInfotwo = authorInfotwo+RegExp.$1+"\n"
+			}
+		}
 		
 		// 内容简介
 		// 获取展开全部按钮里面的内容
-		// let contentInfoList = ZU.xpath(doc, "//span[text()='内容简介']/parent::h2/following-sibling::div[@id='link-report']//div[@class='intro']")
-		let contentInfo = ""
-		try{
-			contentInfo = pageDoc.querySelector('div#link-report div div p').textContent
-		} catch{
-			
-		}
+		let contentInfoList = ZU.xpath(doc, "//span[text()='内容简介']/parent::h2/following-sibling::div[@id='link-report']//div[@class='intro']")
 		// let contentInfo = ""
-		// let contentInfoTwo = ""
-		// if(contentInfoList.length>0){
-		// 	contentInfo = contentInfoList[contentInfoList.length-1].innerHTML
-		// 	contentInfo = contentInfo.match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
-		// 	for(i=0;i<contentInfo.length;i++){
-		// 	contentInfo[i] = contentInfo[i].match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
-		// 	contentInfoTwo = contentInfoTwo+RegExp.$1+"\n"
-		// 	}
+		// try{
+		// 	contentInfo = pageDoc.querySelector('div#link-report div div').textContent
+		// } catch{
+			
 		// }
+		let contentInfo = ""
+		let contentInfoTwo = ""
+		if(contentInfoList.length>0){
+			contentInfo = contentInfoList[contentInfoList.length-1].innerHTML
+			contentInfo = contentInfo.match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
+			for(i=0;i<contentInfo.length;i++){
+			contentInfo[i] = contentInfo[i].match(/<[a-zA-Z]+.*?>([\s\S]*?)<\/[a-zA-Z]+.*?>/g)
+			contentInfoTwo = contentInfoTwo+RegExp.$1+"\n"
+			}
+		}
 		
-		// let abstractNoteTemp = "作者简介:"+"\n"+authorInfotwo+"\n"+
-		// "内容简介:"+"\n"+contentInfoTwo		
-		let abstractNoteTemp = "作者简介:"+"\n"+authorInfo+"\n"+
-		"内容简介:"+"\n"+contentInfo
+		let abstractNoteTemp = "作者简介:"+"\n"+authorInfotwo+"\n"+
+		"内容简介:"+"\n"+contentInfoTwo		
+		// let abstractNoteTemp = "作者简介:"+"\n"+authorInfo+"\n"+
+		// "内容简介:"+"\n"+contentInfo
 
 		newItem.abstractNote = abstractNoteTemp
 		
