@@ -9,7 +9,7 @@
 	"inRepository": true,
 	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2021-09-27 12:33:29"
+	"lastUpdated": "2021-09-28 01:34:46"
 }
 
 /*
@@ -463,7 +463,7 @@ function scrapeAndParse(doc, url) {
 			if(pageDoc.querySelector('style+h2+div.indent div div.intro')){
 				authorInfo = pageDoc.querySelector('style+h2+div.indent div div.intro').textContent
 			}else{
-				authorInfo = pageDoc.querySelector('h2 +div span.all div').textContent
+				authorInfo = pageDoc.querySelector('style+h2 +div span.all div.intro').textContent
 			}
 		}
 		
@@ -471,8 +471,7 @@ function scrapeAndParse(doc, url) {
 			
 		}
 		
-		let abstractNoteTemp = "作者简介:"+authorInfo+"\n\n"+
-		"内容简介:"+contentInfo
+		let abstractNoteTemp = 	"内容简介:"+contentInfo+"\n\n"+	"作者简介:"+authorInfo
 
 		newItem.abstractNote = abstractNoteTemp
 		
