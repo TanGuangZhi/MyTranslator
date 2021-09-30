@@ -2,14 +2,14 @@
 	"translatorID": "9c2d9ae4-266f-4b95-b0ee-4e3e9b299974",
 	"label": "DBMovie",
 	"creator": "氦客船长<TanGuangZhi@foxmail.com>",
-	"target": "https://movie.douban.com/subject/\\d+",
+	"target": "https://movie.douban.com/subject|top250",
 	"minVersion": "3.0",
 	"maxVersion": "",
 	"priority": 100,
 	"inRepository": true,
 	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2021-09-25 13:46:24"
+	"lastUpdated": "2021-09-30 10:45:04"
 }
 
 /*
@@ -38,7 +38,7 @@
 
 function detectWeb(doc, url) {
 	// TODO: adjust the logic here
-	if (url.includes('/movie.douban.com/')) {
+	if (url.includes('/movie.douban.com/subject/')) {
 		return "film";
 	}
 	else if (getSearchResults(doc, true)) {
@@ -51,7 +51,7 @@ function getSearchResults(doc, checkOnly) {
 	var items = {};
 	var found = false;
 	// TODO: adjust the CSS selector
-	var rows = doc.querySelectorAll('h2>a.title[href*="/article/"]');
+	var rows = doc.querySelectorAll('div.hd a');
 	for (let row of rows) {
 		// TODO: check and maybe adjust
 		let href = row.href;
