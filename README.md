@@ -1,22 +1,9 @@
-# 1. Zotero translators 中文维护小组-开智分组
+# 1. Zotero translators 中文维护小组
 
-# 2. 背景
-剥削机器而非剥削人，为国内优质信息源新增translator，借助工具提高学习效率。
+# 2. 已新增/优化的translator✅
 
-# 3. 安装
-## 3.1. zotero安装
- * 参考：[Zotero（1）：文献管理软件Zotero基础及进阶示范 - 阳志平的网志](https://www.yangzhiping.com/tech/zotero1.html)
+## 2.1. 新增
 
-## 3.2. translator更新流程图
-![image](http://picbed.tgz666.top/20210528155304.png?roundPic/radius/25%7CimageView2/2/w/900/h/1456/format/jpg)
-
-
-
- * 更详细的教程可参考隔壁zotero中文小组详细文档或视频教学 ：[l0o0/translators_CN: Zotero translator中文网页抓取插件](https://github.com/l0o0/translators_CN)
-
-
-# 4. 已新增/优化的translator✅
-## 4.1. 新增
 1. 少数派（SSPai.js)
 2. 36Kr（Kr36.js）
 3. 财新网（CaiXin.js）
@@ -26,12 +13,30 @@
 
 
 
-## 4.2. 优化
+## 2.2. 优化
+
 * 豆瓣（DouBan.js）
 * Semantic Scholar（SemanticScholar.js）
 * 微信公众号 （Weixin.js）
 * 知乎 （Zhihu.js）
 * YouTube （YouTube.js）
+
+
+
+# 3. 背景
+
+剥削机器而非剥削人，为国内优质信息源新增translator，借助工具提高学习效率。
+
+# 4. 安装
+## 4.1. zotero安装
+ * 参考：[Zotero（1）：文献管理软件Zotero基础及进阶示范 - 阳志平的网志](https://www.yangzhiping.com/tech/zotero1.html)
+
+## 4.2. translator更新流程图
+![image](http://picbed.tgz666.top/20210528155304.png?roundPic/radius/25%7CimageView2/2/w/900/h/1456/format/jpg)
+
+
+
+ * 更详细的教程可参考隔壁zotero中文小组详细文档或视频教学 ：[l0o0/translators_CN: Zotero translator中文网页抓取插件](https://github.com/l0o0/translators_CN)
 
 
 
