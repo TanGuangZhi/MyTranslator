@@ -2,14 +2,14 @@
 	"translatorID": "9c2d9ae4-266f-4b95-b0ee-4e3e9b299974",
 	"label": "DBMovie",
 	"creator": "氦客船长<TanGuangZhi@foxmail.com>",
-	"target": "https://movie.douban.com/subject|top250",
+	"target": "https://movie.douban.com/subject|top250|tag",
 	"minVersion": "3.0",
 	"maxVersion": "",
 	"priority": 100,
 	"inRepository": true,
 	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2021-09-30 10:45:04"
+	"lastUpdated": "2021-09-30 11:07:38"
 }
 
 /*
@@ -51,7 +51,10 @@ function getSearchResults(doc, checkOnly) {
 	var items = {};
 	var found = false;
 	// TODO: adjust the CSS selector
-	var rows = doc.querySelectorAll('div.hd a');
+	var rows = doc.querySelectorAll('div.list-wp a');
+	if(rows.length==0){
+		rows = doc.querySelectorAll('div.hd a');
+	}
 	for (let row of rows) {
 		// TODO: check and maybe adjust
 		let href = row.href;
