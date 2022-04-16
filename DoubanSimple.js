@@ -9,7 +9,7 @@
 	"inRepository": true,
 	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2021-05-20 10:32:46"
+	"lastUpdated": "2022-04-16 23:09:31"
 }
 
 /*
@@ -271,12 +271,15 @@ function scrapeAndParse(doc, url) {
 		}
 
 		// 出版社
-		pattern = /<span [^>]*?>出版社:<\/span>(.*?)<br\/>/;
-		if (pattern.test(page)) {
-			var publisher = pattern.exec(page)[1];
-			newItem.publisher = Zotero.Utilities.trim(publisher);
-			// Zotero.debug("publisher: "+publisher);
-		}
+		// Zotero.debug("test"+doc.querySelector("#info>.pl+a").innerText)
+		// pattern = /<span [^>]*?>出版社:<\/span>(.*?)<br\/>/;
+		// if (pattern.test(page)) {
+		// 	var publisher = pattern.exec(page)[1];
+		// 	newItem.publisher = Zotero.Utilities.trim(publisher);
+		// 	// Zotero.debug("publisher: "+publisher);
+		// }
+		let publisher = doc.querySelector("#info>.pl+a").innerText;
+		newItem.publisher = Zotero.Utilities.trim(publisher);
 
 		// 定价
 		pattern = /<span [^>]*?>定价:(.*?)<\/span>(.*?)<br\/?>/;
@@ -407,6 +410,7 @@ function scrapeAndParse(doc, url) {
 		newItem.complete();
 	});
 }
+
 
 
 /** BEGIN TEST CASES **/
